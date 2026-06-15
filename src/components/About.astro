@@ -1,0 +1,286 @@
+---
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const l = lang as 'en' | 'ar';
+
+const content = {
+  en: {
+    badge: 'Who We Are',
+    title: 'About YG-Auditors',
+    story: 'Youssef Galal, FCCA — Public Accountant and Consultancy was founded in 2015 with a single commitment: to provide the highest quality financial services to every client we serve.',
+    detail: 'Our office is located in New Maadi, Cairo, Egypt. We serve a wide variety of clients across Egypt — from large corporations to small businesses, non-profit organizations, and individual professionals.',
+    promise: 'We make sure that every client is served by the expertise of our whole firm — combining deep regulatory knowledge, international standards, and local market understanding.',
+    highlights: [
+      { icon: '🏆', title: 'ACCA Certified', desc: 'International professional standard from the UK\'s leading accountancy body' },
+      { icon: '🏛️', title: 'Ministry Approved', desc: 'Officially registered in the Egyptian Ministry of Finance general registry' },
+      { icon: '📍', title: 'Based in Maadi', desc: 'Conveniently located in New Maadi, Cairo with Egypt-wide client service' },
+    ],
+    stats: [
+      { value: '2015', label: 'Year Founded' },
+      { value: '10+', label: 'Years Active' },
+      { value: '100+', label: 'Clients Served' },
+      { value: '5', label: 'Core Services' },
+    ],
+  },
+  ar: {
+    badge: 'من نحن',
+    title: 'عن مكتبنا',
+    story: 'تأسس مكتب يوسف جلال للمحاسبة القانونية والاستشارات عام 2015 بالتزام واحد: تقديم أعلى مستويات الخدمات المالية لكل عميل نخدمه.',
+    detail: 'مكتبنا يقع في منطقة المعادي الجديدة، القاهرة، مصر. نخدم مجموعة واسعة من العملاء في جميع أنحاء مصر — من الشركات الكبرى إلى الشركات الصغيرة والمنظمات غير الربحية والمهنيين الأفراد.',
+    promise: 'نحرص على خدمة كل عميل بخبرة مكتبنا بأكمله — من خلال الجمع بين المعرفة التنظيمية العميقة والمعايير الدولية وفهم السوق المحلي.',
+    highlights: [
+      { icon: '🏆', title: 'شهادة ACCA', desc: 'معيار مهني دولي من الهيئة المحاسبية الرائدة في المملكة المتحدة' },
+      { icon: '🏛️', title: 'موافقة وزارية', desc: 'مسجل رسمياً في السجل العام لوزارة المالية المصرية' },
+      { icon: '📍', title: 'في المعادي', desc: 'موقع مريح في المعادي الجديدة، القاهرة، مع خدمة عملاء في جميع أنحاء مصر' },
+    ],
+    stats: [
+      { value: '2015', label: 'سنة التأسيس' },
+      { value: '+10', label: 'سنوات نشاط' },
+      { value: '+100', label: 'عميل تم خدمته' },
+      { value: '5', label: 'خدمات أساسية' },
+    ],
+  },
+};
+
+const c = content[l] ?? content.en;
+---
+
+<section class="section about" id="about">
+  <div class="about__bg-shape" aria-hidden="true"></div>
+  <div class="container about__inner">
+
+    <div class="about__left" data-gsap="about-left">
+      <span class="badge">{c.badge}</span>
+      <h2 class="about__title">{c.title}</h2>
+      <div class="divider" style="margin-inline: 0; margin-block-start: 1rem; margin-block-end: 1.75rem;"></div>
+      <p class="about__story">{c.story}</p>
+      <p class="about__detail">{c.detail}</p>
+      <blockquote class="about__promise">
+        <span class="about__quote-mark">"</span>
+        {c.promise}
+      </blockquote>
+    </div>
+
+    <div class="about__right">
+      <div class="about__stats-grid" data-gsap="about-stats">
+        {c.stats.map((s) => (
+          <div class="about__stat-card">
+            <span class="about__stat-value">{s.value}</span>
+            <span class="about__stat-label">{s.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <div class="about__highlights">
+        {c.highlights.map((h, i) => (
+          <div class="about__highlight" data-gsap="about-highlight" style={`--i: ${i}`}>
+            <div class="about__highlight-icon">{h.icon}</div>
+            <div>
+              <h4 class="about__highlight-title">{h.title}</h4>
+              <p class="about__highlight-desc">{h.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .about {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-bg);
+  }
+  .about__bg-shape {
+    position: absolute;
+    top: -120px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, var(--color-primary-50) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .about__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about__title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.85rem, 4vw, 2.75rem);
+    font-weight: 700;
+    color: var(--color-text-dark);
+    margin-top: 1rem;
+    line-height: 1.15;
+  }
+  [dir="rtl"] .about__title { font-family: var(--font-arabic-serif); }
+  .about__story {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-text-dark);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+  .about__detail {
+    font-size: 0.97rem;
+    color: var(--color-text-medium);
+    line-height: 1.75;
+    margin-bottom: 1.75rem;
+  }
+  .about__promise {
+    position: relative;
+    background: var(--color-primary-50);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 1.25rem 1.25rem 1.25rem 3rem;
+    font-size: 0.95rem;
+    color: var(--color-text-medium);
+    line-height: 1.7;
+    font-style: italic;
+  }
+  [dir="rtl"] .about__promise {
+    border-left: none;
+    border-right: 4px solid var(--color-primary);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    padding: 1.25rem 3rem 1.25rem 1.25rem;
+  }
+  .about__quote-mark {
+    position: absolute;
+    top: 0.5rem;
+    left: 1rem;
+    font-size: 3rem;
+    font-family: Georgia, serif;
+    color: var(--color-primary);
+    line-height: 1;
+    opacity: 0.4;
+  }
+  [dir="rtl"] .about__quote-mark { left: auto; right: 1rem; }
+
+  /* Right column */
+  .about__stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .about__stat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    text-align: center;
+    transition: var(--transition);
+  }
+  .about__stat-card:hover {
+    box-shadow: var(--shadow-gold);
+    border-color: rgba(108, 63, 160, 0.35);
+    transform: translateY(-3px);
+  }
+  .about__stat-value {
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .about__stat-label {
+    font-size: 0.82rem;
+    color: var(--color-text-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Highlights */
+  .about__highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .about__highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: var(--transition);
+  }
+  .about__highlight:hover {
+    border-color: rgba(108, 63, 160, 0.35);
+    box-shadow: var(--shadow-gold);
+    transform: translateX(4px);
+  }
+  [dir="rtl"] .about__highlight:hover { transform: translateX(-4px); }
+  .about__highlight-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--color-primary-50);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(108, 63, 160, 0.2);
+  }
+  .about__highlight-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    margin-bottom: 0.2rem;
+  }
+  .about__highlight-desc {
+    font-size: 0.82rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 960px) {
+    .about__inner { grid-template-columns: 1fr; gap: 3rem; }
+    .about__bg-shape { display: none; }
+  }
+  @media (max-width: 480px) {
+    .about__stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.create({
+    trigger: '#about',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('[data-gsap="about-left"]',
+        { autoAlpha: 0, x: -50 },
+        { autoAlpha: 1, x: 0, duration: 0.85, ease: 'power3.out' }
+      );
+      gsap.fromTo('[data-gsap="about-stats"] .about__stat-card',
+        { autoAlpha: 0, y: 30, scale: 0.95 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.55, stagger: 0.1, ease: 'back.out(1.3)', delay: 0.2 }
+      );
+      gsap.fromTo('[data-gsap="about-highlight"]',
+        { autoAlpha: 0, x: 40 },
+        { autoAlpha: 1, x: 0, duration: 0.5, stagger: 0.15, ease: 'power3.out', delay: 0.3 }
+      );
+    },
+  });
+</script>

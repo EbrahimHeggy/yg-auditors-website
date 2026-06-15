@@ -1,0 +1,74 @@
+{
+  "categories": [
+    {
+      "id": "businesses",
+      "icon": "business2.png",
+      "iconClass": "fa-briefcase",
+      "title": {
+        "en": "Businesses & Companies",
+        "ar": "الشركات والمنشآت التجارية"
+      },
+      "description": {
+        "en": "We serve a diverse range of commercial businesses across multiple sectors in Egypt.",
+        "ar": "نخدم مجموعة متنوعة من الشركات التجارية في مختلف القطاعات في مصر."
+      },
+      "industries": [
+        { "en": "Food Manufacturing & Trade", "ar": "تصنيع الغذاء والتجارة" },
+        { "en": "Hotels & Hospitality", "ar": "الفنادق والضيافة" },
+        { "en": "Construction", "ar": "البناء والتشييد" },
+        { "en": "Software & IT", "ar": "البرمجيات وتكنولوجيا المعلومات" },
+        { "en": "Engineering Services", "ar": "الخدمات الهندسية" },
+        { "en": "Hospitals & Healthcare", "ar": "المستشفيات والرعاية الصحية" },
+        { "en": "Import & Trading", "ar": "الاستيراد والتجارة" },
+        { "en": "Automotive Services", "ar": "خدمات السيارات" },
+        { "en": "Free Zones", "ar": "المناطق الحرة" },
+        { "en": "Catering", "ar": "خدمات الإطعام والتموين" }
+      ]
+    },
+    {
+      "id": "non-profit",
+      "icon": "non.png",
+      "iconClass": "fa-hands-helping",
+      "title": {
+        "en": "Non-Profit Organizations",
+        "ar": "المنظمات غير الربحية"
+      },
+      "description": {
+        "en": "Specialized services for NGOs, associations, and non-profit entities in Egypt.",
+        "ar": "خدمات متخصصة للمنظمات غير الحكومية والجمعيات والكيانات غير الربحية في مصر."
+      },
+      "industries": [
+        { "en": "Environmental Development", "ar": "التنمية البيئية" },
+        { "en": "Youth Organizations", "ar": "منظمات الشباب" },
+        { "en": "Special Needs", "ar": "ذوو الاحتياجات الخاصة" },
+        { "en": "Educational Organizations", "ar": "المنظمات التعليمية" },
+        { "en": "Social Development", "ar": "التنمية الاجتماعية" },
+        { "en": "Animal Welfare", "ar": "رعاية الحيوان" },
+        { "en": "Microfinance", "ar": "التمويل الأصغر" },
+        { "en": "Addiction Prevention", "ar": "الوقاية من الإدمان" },
+        { "en": "Community Development", "ar": "التنمية المجتمعية" }
+      ]
+    },
+    {
+      "id": "individuals",
+      "icon": "indiv.png",
+      "iconClass": "fa-user-tie",
+      "title": {
+        "en": "Individuals & Professionals",
+        "ar": "الأفراد والمهنيون"
+      },
+      "description": {
+        "en": "Tailored financial services for self-employed professionals and individuals.",
+        "ar": "خدمات مالية مخصصة للمهنيين المستقلين والأفراد."
+      },
+      "industries": [
+        { "en": "Photographers", "ar": "المصورون" },
+        { "en": "Doctors", "ar": "الأطباء" },
+        { "en": "Insurance Agents", "ar": "وكلاء التأمين" },
+        { "en": "Pharmacists", "ar": "الصيادلة" },
+        { "en": "Event Planners", "ar": "منظمو الفعاليات" },
+        { "en": "Freelancers", "ar": "العاملون المستقلون" }
+      ]
+    }
+  ]
+}

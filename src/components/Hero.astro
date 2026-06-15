@@ -1,0 +1,269 @@
+---
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+
+const content = {
+  en: {
+    badge: 'Founded in 2015 · Cairo, Egypt',
+    headline: 'Professional Accounting & Auditing Services',
+    subheadline: 'We are a professional group of accountants and auditors who provide our clients a full range of financial services.',
+    cta1: 'Our Services',
+    cta2: 'Download Profile',
+    stats: [
+      { value: '10+', label: 'Years of Experience' },
+      { value: '100+', label: 'Clients Served' },
+      { value: '5', label: 'Core Services' },
+      { value: 'ACCA', label: 'Certified' },
+    ],
+  },
+  ar: {
+    badge: 'تأسس عام 2015 · القاهرة، مصر',
+    headline: 'خدمات محاسبة ومراجعة احترافية',
+    subheadline: 'نحن مجموعة متخصصة من المحاسبين والمراجعين نقدم لعملائنا مجموعة متكاملة من الخدمات المالية.',
+    cta1: 'خدماتنا',
+    cta2: 'تحميل الملف التعريفي',
+    stats: [
+      { value: '+10', label: 'سنوات من الخبرة' },
+      { value: '+100', label: 'عميل تم خدمته' },
+      { value: '5', label: 'خدمات أساسية' },
+      { value: 'ACCA', label: 'معتمد دولياً' },
+    ],
+  },
+};
+
+const c = content[lang as keyof typeof content] ?? content.en;
+---
+
+<section class="hero" id="intro">
+  <div class="hero__bg-decoration" aria-hidden="true">
+    <div class="hero__circle hero__circle--1"></div>
+    <div class="hero__circle hero__circle--2"></div>
+    <div class="hero__circle hero__circle--3"></div>
+  </div>
+
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <span class="hero__badge" data-gsap="hero-badge">{c.badge}</span>
+      <h1 class="hero__headline" data-gsap="hero-headline">{c.headline}</h1>
+      <p class="hero__sub" data-gsap="hero-sub">{c.subheadline}</p>
+      <div class="hero__actions" data-gsap="hero-actions">
+        <a href="#services" class="btn btn-primary">{c.cta1}</a>
+        <a href="/data/yg-auditors.pdf" class="btn btn-outline" download>{c.cta2}</a>
+      </div>
+    </div>
+
+    <div class="hero__visual" data-gsap="hero-image">
+      <div class="hero__image-wrap">
+        <img src="/images/intro-img1.png" alt="YG-Auditors Professional Services" class="hero__img" />
+        <div class="hero__badge-float" data-gsap="hero-float-badge">
+          <span class="hero__badge-float-icon">✓</span>
+          <span>ACCA Certified</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__stats">
+    <div class="container">
+      <div class="hero__stats-grid">
+        {c.stats.map((stat) => (
+          <div class="hero__stat" data-gsap="hero-stat">
+            <span class="hero__stat-value">{stat.value}</span>
+            <span class="hero__stat-label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(108, 63, 160, 0.05) 0%, transparent 70%), var(--color-bg);
+    padding-block-start: 72px;
+  }
+  .hero__bg-decoration {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .hero__circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(108, 63, 160, 0.08);
+    background: transparent;
+  }
+  .hero__circle--1 { width: 700px; height: 700px; top: -250px; right: -250px; opacity: 0.6; }
+  .hero__circle--2 { width: 450px; height: 450px; bottom: -180px; left: -120px; opacity: 0.4; }
+  .hero__circle--3 { width: 240px; height: 240px; top: 38%; right: 28%; opacity: 0.25; }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding-block: 5rem;
+  }
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.32rem 1rem;
+    border-radius: 0;
+    border: 1px solid rgba(108, 63, 160, 0.4);
+    margin-bottom: 1.75rem;
+  }
+  .hero__headline {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+    font-weight: 700;
+    line-height: 1.08;
+    margin-bottom: 1.35rem;
+    background: linear-gradient(140deg, var(--color-text-dark) 0%, var(--color-primary) 55%, var(--color-primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  [dir="rtl"] .hero__headline {
+    font-family: var(--font-arabic-serif);
+  }
+  .hero__sub {
+    font-size: 1.15rem;
+    color: var(--color-text-medium);
+    margin-bottom: 2.25rem;
+    max-width: 520px;
+    line-height: 1.75;
+  }
+  .hero__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero__visual {
+    display: flex;
+    justify-content: center;
+  }
+  .hero__image-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+  }
+  .hero__img {
+    width: 100%;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    object-fit: cover;
+  }
+  .hero__badge-float {
+    position: absolute;
+    bottom: -1.5rem;
+    left: -1.5rem;
+    background: var(--color-surface);
+    border-radius: 0;
+    padding: 0.85rem 1.25rem;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+  }
+  .hero__badge-float-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-radius: 0;
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+
+  .hero__stats {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 2.25rem 0;
+  }
+  .hero__stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    text-align: center;
+  }
+  .hero__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem;
+    border-right: 1px solid var(--color-border);
+  }
+  .hero__stat:last-child { border-right: none; }
+  .hero__stat-value {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+  }
+  .hero__stat-label {
+    font-size: 0.78rem;
+    color: var(--color-text-light);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .hero__inner { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+    .hero__visual { display: none; }
+    .hero__sub { margin-inline: auto; }
+    .hero__actions { justify-content: center; }
+    .hero__stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero__stat { border-right: none; }
+  }
+  @media (max-width: 480px) {
+    .hero__stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  // Initial invisible state
+  gsap.set('[data-gsap="hero-badge"]',      { autoAlpha: 0, y: 24 });
+  gsap.set('[data-gsap="hero-headline"]',   { autoAlpha: 0, y: 32 });
+  gsap.set('[data-gsap="hero-sub"]',        { autoAlpha: 0, y: 24 });
+  gsap.set('[data-gsap="hero-actions"]',    { autoAlpha: 0, y: 20 });
+  gsap.set('[data-gsap="hero-image"]',      { autoAlpha: 0, x: 40 });
+  gsap.set('[data-gsap="hero-float-badge"]',{ autoAlpha: 0, scale: 0.8 });
+  gsap.set('[data-gsap="hero-stat"]',       { autoAlpha: 0, y: 20 });
+
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.1 });
+
+  tl.to('[data-gsap="hero-badge"]',       { autoAlpha: 1, y: 0, duration: 0.55 })
+    .to('[data-gsap="hero-headline"]',    { autoAlpha: 1, y: 0, duration: 0.7  }, '-=0.3')
+    .to('[data-gsap="hero-sub"]',         { autoAlpha: 1, y: 0, duration: 0.55 }, '-=0.35')
+    .to('[data-gsap="hero-actions"]',     { autoAlpha: 1, y: 0, duration: 0.5  }, '-=0.25')
+    .to('[data-gsap="hero-image"]',       { autoAlpha: 1, x: 0, duration: 0.8  }, '-=0.7')
+    .to('[data-gsap="hero-float-badge"]', { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'back.out(1.4)' }, '-=0.3')
+    .to('[data-gsap="hero-stat"]',        { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.1 }, '-=0.2');
+</script>

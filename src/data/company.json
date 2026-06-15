@@ -1,0 +1,36 @@
+{
+  "name": "YG-Auditors",
+  "legalName": "Youssef Galal Accounting & Auditing Office",
+  "arabicLegalName": "مكتب يوسف أحمد جلال - المحاسب القانوني",
+  "founded": 2015,
+  "type": "Accounting & Auditing Firm",
+  "description": {
+    "en": "YG-Auditors is a professional accounting and consultancy firm founded in 2015, offering a comprehensive range of financial services. We serve individuals, businesses, and non-profit organizations across Egypt with the highest professional standards.",
+    "ar": "تأسس مكتب يوسف أحمد جلال - المحاسب القانوني - عام 2015 بغرض تقديم مجموعة متكاملة من الخدمات المحاسبية والاستشارية للأفراد والشركات والمنظمات غير الربحية في مصر."
+  },
+  "mission": "To provide our clients with a full range of high-quality financial services, combining professional expertise with personalized attention.",
+  "vision": "To be the most trusted accounting and auditing firm in Egypt, known for integrity, professionalism, and client satisfaction.",
+  "values": [
+    "Integrity",
+    "Professionalism",
+    "Client Focus",
+    "Accuracy",
+    "Confidentiality",
+    "Continuous Improvement"
+  ],
+  "workingHours": {
+    "days": "Sunday – Thursday",
+    "hours": "9:00 AM – 5:00 PM",
+    "timezone": "Cairo Time (EET/EEST)"
+  },
+  "companyProfile": {
+    "file": "/data/yg-auditors.pdf",
+    "label": "Download Company Profile"
+  },
+  "stats": [
+    { "value": "2015", "label": "Founded" },
+    { "value": "10+", "label": "Years Experience" },
+    { "value": "100+", "label": "Clients Served" },
+    { "value": "5", "label": "Core Services" }
+  ]
+}

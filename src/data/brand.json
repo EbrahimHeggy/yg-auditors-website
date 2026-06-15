@@ -1,0 +1,38 @@
+{
+  "name": "YG-Auditors",
+  "fullName": "Youssef Galal Accounting & Auditing Office",
+  "arabicName": "مكتب يوسف أحمد جلال - المحاسب القانوني",
+  "founded": 2015,
+  "tagline": "We are a professional group of accountants and auditors who provide our clients a full range of financial services.",
+  "arabicTagline": "تأسس مكتب يوسف أحمد جلال - المحاسب القانوني - عام 2015 بغرض تقديم مجموعة متكاملة من الخدمات",
+  "logo": {
+    "file": "/images/logo2.png",
+    "description": "Abstract purple concentric curved-lines swirl icon",
+    "style": "Abstract / Geometric"
+  },
+  "colors": {
+    "primary": "#6C3FA0",
+    "primaryDark": "#4B2980",
+    "primaryLight": "#9B6FD0",
+    "secondary": "#3A86FF",
+    "accent": "#F5A623",
+    "background": "#FFFFFF",
+    "backgroundAlt": "#F7F5FB",
+    "textDark": "#1A1A2E",
+    "textMedium": "#4A4A6A",
+    "textLight": "#6B7280",
+    "border": "#E2D9F3",
+    "success": "#10B981",
+    "white": "#FFFFFF"
+  },
+  "typography": {
+    "headingFont": "Inter, sans-serif",
+    "bodyFont": "Inter, sans-serif",
+    "arabicFont": "Cairo, sans-serif"
+  },
+  "languages": ["en", "ar"],
+  "defaultLanguage": "en",
+  "rtlLanguages": ["ar"],
+  "developer": "Trioplus",
+  "copyright": "2025"
+}

@@ -1,0 +1,146 @@
+---
+import industriesData from '../data/industries.json';
+
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const l = lang as 'en' | 'ar';
+
+const headings = {
+  en: { badge: 'Who We Serve', title: 'Industries We Serve', sub: 'Our expertise spans a broad range of sectors, from commercial businesses to non-profits and individual professionals.' },
+  ar: { badge: 'من نخدم', title: 'القطاعات التي نخدمها', sub: 'تمتد خبرتنا عبر مجموعة واسعة من القطاعات من الشركات التجارية إلى المنظمات غير الربحية والمهنيين الأفراد.' },
+};
+const h = headings[l] ?? headings.en;
+
+const catIcons: Record<string, string> = {
+  'businesses': '🏢',
+  'non-profit': '🤝',
+  'individuals': '👤',
+};
+---
+
+<section class="section" id="industries">
+  <div class="container">
+    <div class="section-header" data-gsap="industries-header">
+      <span class="badge">{h.badge}</span>
+      <h2>{h.title}</h2>
+      <div class="divider"></div>
+      <p>{h.sub}</p>
+    </div>
+
+    <div class="industries__grid" data-gsap="industries-grid">
+      {industriesData.categories.map((cat, i) => (
+        <div class="industry-card" style={`--i: ${i}`}>
+          <div class="industry-card__header">
+            <span class="industry-card__icon">{catIcons[cat.id] ?? '📌'}</span>
+            <div>
+              <h3 class="industry-card__title">{cat.title[l] ?? cat.title.en}</h3>
+              <p class="industry-card__desc">{cat.description[l] ?? cat.description.en}</p>
+            </div>
+          </div>
+          <div class="industry-card__tags">
+            {cat.industries.map((ind) => (
+              <span class="industry-tag">{ind[l] ?? ind.en}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .industries__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .industry-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    transition: var(--transition);
+    transition-delay: calc(var(--i, 0) * 0.1s);
+  }
+  .industry-card:hover {
+    box-shadow: var(--shadow-lg), var(--shadow-gold);
+    transform: translateY(-4px);
+    border-color: rgba(108, 63, 160, 0.32);
+  }
+  .industry-card__header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+  }
+  .industry-card__icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    background: var(--color-primary-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(108, 63, 160, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .industry-card__title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--color-text-dark);
+  }
+  .industry-card__desc {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+  }
+  .industry-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .industry-tag {
+    background: var(--color-primary-50);
+    color: var(--color-primary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-primary-100);
+    transition: var(--transition);
+  }
+  .industry-tag:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  @media (max-width: 1024px) {
+    .industries__grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.create({
+    trigger: '#industries',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('[data-gsap="industries-header"]',
+        { autoAlpha: 0, y: 40 },
+        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+      );
+      gsap.fromTo('#industries .industry-card',
+        { autoAlpha: 0, y: 50, scale: 0.97 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.15, ease: 'power3.out', delay: 0.2 }
+      );
+    },
+  });
+</script>

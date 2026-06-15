@@ -1,0 +1,306 @@
+/* ── YG-Auditors Global Styles · Dramatic Vintage Edition ── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ── Light Backgrounds ── */
+  --color-bg:             #FFFFFF;
+  --color-bg-alt:         #F5F3F9;
+  --color-surface:        #FFFFFF;
+  --color-surface-2:      #EEE9F5;
+
+  /* ── Purple Primary ── */
+  --color-primary:        #6C3FA0;
+  --color-primary-dark:   #4D2B77;
+  --color-primary-light:  #9561C8;
+  --color-primary-50:     rgba(108, 63, 160, 0.07);
+  --color-primary-100:    rgba(108, 63, 160, 0.14);
+
+  /* ── Supporting ── */
+  --color-secondary:      #8B7BAE;
+  --color-accent:         #6C3FA0;
+  --color-success:        #3D8B5E;
+
+  /* ── Text (dark on light bg) ── */
+  --color-text-dark:      #1A1028;
+  --color-text-medium:    #55496A;
+  --color-text-light:     #8B7EAA;
+  --color-white:          #FFFFFF;
+
+  /* ── Borders ── */
+  --color-border:         rgba(108, 63, 160, 0.16);
+  --color-border-strong:  rgba(108, 63, 160, 0.38);
+
+  /* ── Typography ── */
+  --font-serif:        'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-arabic-serif: 'Amiri', Georgia, serif;
+  --font-body:         'Inter', system-ui, sans-serif;
+  --font-arabic:       'Cairo', system-ui, sans-serif;
+
+  /* ── Shadows (purple-tinted) ── */
+  --shadow-sm:   0 1px 4px rgba(108, 63, 160, 0.08);
+  --shadow-md:   0 4px 20px rgba(108, 63, 160, 0.12), 0 0 0 1px rgba(108, 63, 160, 0.04);
+  --shadow-lg:   0 8px 36px rgba(108, 63, 160, 0.14), 0 0 0 1px rgba(108, 63, 160, 0.05);
+  --shadow-xl:   0 20px 60px rgba(108, 63, 160, 0.18), 0 0 0 1px rgba(108, 63, 160, 0.06);
+  --shadow-gold: 0 0 28px rgba(108, 63, 160, 0.18);
+
+  /* ── Radius ── */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1.25rem;
+  --radius-full: 9999px;
+
+  --transition:  all 0.25s ease;
+  --container:   1200px;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+/* ── Grain texture overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-dark);
+  background: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── RTL Support ── */
+[dir="rtl"] body {
+  font-family: var(--font-arabic);
+}
+
+/* ── Typography ── */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-dark);
+}
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  font-family: var(--font-arabic-serif);
+}
+h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-dark);
+}
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.75rem, 4vw, 2.75rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+h4 { font-size: 1.15rem; }
+
+p { color: var(--color-text-medium); line-height: 1.75; }
+
+a { color: var(--color-primary); text-decoration: none; transition: var(--transition); }
+a:hover { color: var(--color-primary-light); }
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* ── Container ── */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* ── Section ── */
+.section {
+  padding-block: 5.5rem;
+}
+.section-alt {
+  background: var(--color-bg-alt);
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+.section-header .badge {
+  display: inline-block;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.3rem 1.1rem;
+  border-radius: 0;
+  border: 1px solid rgba(108, 63, 160, 0.4);
+  margin-bottom: 1.1rem;
+}
+.section-header h2 {
+  margin-bottom: 1rem;
+}
+.section-header p {
+  max-width: 640px;
+  margin-inline: auto;
+  font-size: 1.05rem;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.btn-primary {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
+}
+.btn-primary:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: rgba(108, 63, 160, 0.45);
+}
+.btn-outline:hover {
+  background: rgba(108, 63, 160, 0.07);
+  border-color: var(--color-primary);
+  color: var(--color-primary-light);
+  transform: translateY(-2px);
+}
+.btn-white {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
+}
+.btn-white:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 2rem;
+  transition: var(--transition);
+}
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: rgba(108, 63, 160, 0.35);
+}
+
+/* ── Grid utilities ── */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .section { padding-block: 3.5rem; }
+}
+
+/* ── Ornamental Divider ── */
+.divider {
+  width: 90px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-primary) 70%, transparent);
+  margin: 1.25rem auto 0;
+  opacity: 0.6;
+}
+
+/* ── Badge (standalone, not in section-header) ── */
+.badge {
+  display: inline-block;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.9rem;
+  border: 1px solid rgba(108, 63, 160, 0.38);
+  border-radius: 0;
+}
+
+/* ── Scroll animations ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Form inputs ── */
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.form-input {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--color-text-dark);
+  background: rgba(108, 63, 160, 0.03);
+  transition: var(--transition);
+  outline: none;
+  width: 100%;
+}
+.form-input::placeholder { color: var(--color-text-light); }
+.form-input:focus {
+  border-color: var(--color-primary);
+  background: rgba(108, 63, 160, 0.05);
+  box-shadow: 0 0 0 3px rgba(108, 63, 160, 0.1);
+}
+.form-textarea { resize: vertical; min-height: 120px; }
+.form-submit { width: 100%; justify-content: center; }
+.form-note {
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--color-success);
+  min-height: 1.2em;
+}

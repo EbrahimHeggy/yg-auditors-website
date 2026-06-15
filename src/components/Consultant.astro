@@ -1,0 +1,244 @@
+---
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+
+const content = {
+  en: {
+    badge: 'Free Consultation',
+    title: 'Get Expert Financial Advice',
+    sub: 'With No Obligation — Tell us about your needs and one of our professionals will get back to you.',
+    namePlaceholder: 'Your Full Name',
+    emailPlaceholder: 'Email Address',
+    messagePlaceholder: 'Describe your financial needs or question...',
+    submit: 'Send Message',
+    info: [
+      { icon: '📞', label: 'Phone', value: '+20 2 2517 9678', href: 'tel:+20225179678' },
+      { icon: '📱', label: 'Mobile', value: '+20 100 480 9543', href: 'tel:+201004809543' },
+      { icon: '📧', label: 'Email', value: 'Ygalal@yg-auditors.com', href: 'mailto:Ygalal@yg-auditors.com' },
+      { icon: '🕐', label: 'Hours', value: 'Sun–Thu, 9AM–5PM', href: null },
+    ],
+  },
+  ar: {
+    badge: 'استشارة مجانية',
+    title: 'احصل على استشارة مالية متخصصة',
+    sub: 'بدون أي التزام — أخبرنا باحتياجاتك وسيتواصل معك أحد متخصصينا في أقرب وقت.',
+    namePlaceholder: 'الاسم الكامل',
+    emailPlaceholder: 'البريد الإلكتروني',
+    messagePlaceholder: 'اشرح احتياجاتك المالية أو سؤالك...',
+    submit: 'إرسال الرسالة',
+    info: [
+      { icon: '📞', label: 'هاتف', value: '+20 2 2517 9678', href: 'tel:+20225179678' },
+      { icon: '📱', label: 'جوال', value: '+20 100 480 9543', href: 'tel:+201004809543' },
+      { icon: '📧', label: 'بريد إلكتروني', value: 'Ygalal@yg-auditors.com', href: 'mailto:Ygalal@yg-auditors.com' },
+      { icon: '🕐', label: 'مواعيد العمل', value: 'الأحد–الخميس، 9 ص–5 م', href: null },
+    ],
+  },
+};
+
+const c = content[lang as keyof typeof content] ?? content.en;
+---
+
+<section class="consultant section" id="consultant">
+  <div class="consultant__bg" aria-hidden="true"></div>
+  <div class="container consultant__inner">
+    <div class="consultant__content" data-gsap="consultant-content">
+      <span class="badge badge--white">{c.badge}</span>
+      <h2 class="consultant__title">{c.title}</h2>
+      <p class="consultant__sub">{c.sub}</p>
+
+      <div class="consultant__info">
+        {c.info.map((item) => (
+          <div class="consultant__info-item">
+            <span class="consultant__info-icon">{item.icon}</span>
+            <div>
+              <span class="consultant__info-label">{item.label}</span>
+              {item.href
+                ? <a href={item.href} class="consultant__info-value">{item.value}</a>
+                : <span class="consultant__info-value">{item.value}</span>
+              }
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <form class="consultant__form" id="consultant-form" data-gsap="consultant-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="name">{lang === 'ar' ? 'الاسم' : 'Name'}</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-input"
+          placeholder={c.namePlaceholder}
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">{lang === 'ar' ? 'البريد الإلكتروني' : 'Email'}</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-input"
+          placeholder={c.emailPlaceholder}
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="message">{lang === 'ar' ? 'الرسالة' : 'Message'}</label>
+        <textarea
+          id="message"
+          name="message"
+          class="form-input form-textarea"
+          placeholder={c.messagePlaceholder}
+          rows={5}
+          required
+        ></textarea>
+      </div>
+      <button type="submit" class="btn btn-white form-submit">
+        {c.submit} →
+      </button>
+      <p class="form-note" id="form-status"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .consultant {
+    position: relative;
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 60%, var(--color-primary-light) 100%);
+    color: var(--color-white);
+    overflow: hidden;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .consultant__bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 60% 50% at 90% 10%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 10% 90%, rgba(255, 255, 255, 0.07) 0%, transparent 60%);
+  }
+  .consultant__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .badge--white {
+    background: rgba(255,255,255,0.15);
+    color: var(--color-white);
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(4px);
+  }
+  .consultant__title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--color-primary-light);
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    line-height: 1.2;
+  }
+  [dir="rtl"] .consultant__title { font-family: var(--font-arabic-serif); }
+  .consultant__sub {
+    color: rgba(255,255,255,0.8);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+  .consultant__info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .consultant__info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .consultant__info-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+  .consultant__info-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.15rem;
+  }
+  .consultant__info-value {
+    color: var(--color-white);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  a.consultant__info-value:hover { opacity: 0.8; }
+
+  /* Form */
+  .consultant__form {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .consultant__inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.create({
+    trigger: '#consultant',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('[data-gsap="consultant-content"]',
+        { autoAlpha: 0, x: -60 },
+        { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
+      );
+      gsap.fromTo('[data-gsap="consultant-form"]',
+        { autoAlpha: 0, x: 60 },
+        { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
+      );
+    },
+  });
+
+  const form = document.getElementById('consultant-form') as HTMLFormElement | null;
+  const status = document.getElementById('form-status');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (status) {
+      status.textContent = '✓ Message sent! We will contact you soon.';
+      status.style.color = 'var(--color-success)';
+    }
+    form.reset();
+  });
+</script>

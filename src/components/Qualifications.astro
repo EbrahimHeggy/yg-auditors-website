@@ -1,0 +1,467 @@
+---
+import teamData from '../data/team.json';
+
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const l = lang as 'en' | 'ar';
+
+const certPath = teamData.team.find(m => m.certificate)?.certificate ?? '';
+
+const content = {
+  en: {
+    badge: 'Our Credentials',
+    title: 'Qualifications & Approvals',
+    sub: 'Youssef Galal holds internationally recognised qualifications and is officially approved by every major Egyptian financial regulatory authority.',
+    memberships: {
+      heading: 'Professional Memberships',
+      items: [
+        {
+          abbr: 'ACCA',
+          name: 'Association of Certified Chartered Accountants',
+          country: 'United Kingdom',
+          desc: 'The global body for professional accountants, with FCCA designation representing Fellow membership.',
+          color: '#6C3FA0',
+        },
+        {
+          abbr: 'ESAA',
+          name: 'Egyptian Society of Accountants and Auditors',
+          country: 'Egypt',
+          desc: 'The primary professional body for accountants and auditors in Egypt.',
+          color: '#3A86FF',
+        },
+        {
+          abbr: 'ETA',
+          name: 'Egyptian Tax Association',
+          country: 'Egypt',
+          desc: 'Specialist professional body for tax practitioners operating in the Egyptian market.',
+          color: '#F5A623',
+        },
+      ],
+    },
+    approvals: {
+      heading: 'Regulatory Approvals',
+      items: [
+        {
+          icon: '🏛️',
+          name: 'Ministry of Finance',
+          detail: 'General Registry of Accountants and Auditors — Joint-Stock Companies',
+          authority: 'Egyptian Government',
+        },
+        {
+          icon: '⚖️',
+          name: 'Syndicate of Commerce',
+          detail: 'Practicing Division of Accountants and Auditors',
+          authority: 'Egyptian Government',
+        },
+        {
+          icon: '📈',
+          name: 'GAFI',
+          detail: 'General Authority for Investment and Free-Zones — Auditor of SAE Companies',
+          authority: 'Egyptian Government',
+        },
+        {
+          icon: '🏦',
+          name: 'EFSA',
+          detail: 'Egyptian Financial Supervisory Authority — Auditor, Micro-finance Registry (c)',
+          authority: 'Egyptian Government',
+        },
+      ],
+    },
+  },
+  ar: {
+    badge: 'مؤهلاتنا',
+    title: 'المؤهلات والاعتمادات',
+    sub: 'يحمل يوسف جلال مؤهلات معترفاً بها دولياً، وهو معتمد رسمياً من قِبل جميع الجهات التنظيمية المالية المصرية الكبرى.',
+    memberships: {
+      heading: 'العضوية المهنية',
+      items: [
+        {
+          abbr: 'ACCA',
+          name: 'جمعية المحاسبين القانونيين المعتمدين',
+          country: 'المملكة المتحدة',
+          desc: 'الهيئة العالمية للمحاسبين المهنيين، مع درجة FCCA التي تمثل عضوية الزمالة.',
+          color: '#6C3FA0',
+        },
+        {
+          abbr: 'ESAA',
+          name: 'جمعية المحاسبين والمراجعين المصريين',
+          country: 'مصر',
+          desc: 'الهيئة المهنية الرئيسية للمحاسبين والمراجعين في مصر.',
+          color: '#3A86FF',
+        },
+        {
+          abbr: 'ETA',
+          name: 'جمعية الضرائب المصرية',
+          country: 'مصر',
+          desc: 'هيئة مهنية متخصصة لممارسي الضرائب العاملين في السوق المصرية.',
+          color: '#F5A623',
+        },
+      ],
+    },
+    approvals: {
+      heading: 'الموافقات التنظيمية',
+      items: [
+        {
+          icon: '🏛️',
+          name: 'وزارة المالية',
+          detail: 'السجل العام للمحاسبين والمراجعين — شركات مساهمة',
+          authority: 'الحكومة المصرية',
+        },
+        {
+          icon: '⚖️',
+          name: 'نقابة التجاريين',
+          detail: 'قسم ممارسة المحاسبين والمراجعين',
+          authority: 'الحكومة المصرية',
+        },
+        {
+          icon: '📈',
+          name: 'الهيئة العامة للاستثمار (GAFI)',
+          detail: 'مراجع شركات المساهمة المصرية (SAE)',
+          authority: 'الحكومة المصرية',
+        },
+        {
+          icon: '🏦',
+          name: 'الهيئة المصرية للرقابة المالية (EFSA)',
+          detail: 'مراجع — سجل التمويل متناهي الصغر (ج)',
+          authority: 'الحكومة المصرية',
+        },
+      ],
+    },
+  },
+};
+
+const c = content[l] ?? content.en;
+---
+
+<section class="section quals" id="qualifications">
+  <div class="container">
+
+    <div class="section-header" data-gsap="quals-header">
+      <span class="badge">{c.badge}</span>
+      <h2>{c.title}</h2>
+      <div class="divider"></div>
+      <p>{c.sub}</p>
+    </div>
+
+    <!-- Professional Memberships -->
+    <div class="quals__group" data-gsap="quals-memberships">
+      <h3 class="quals__group-heading">{c.memberships.heading}</h3>
+      <div class="quals__memberships">
+        {c.memberships.items.map((m) => (
+          <div class="quals__member-card" style={`--accent: ${m.color}`}>
+            <div class="quals__member-abbr">{m.abbr}</div>
+            <div class="quals__member-body">
+              <h4 class="quals__member-name">{m.name}</h4>
+              <span class="quals__member-country">{m.country}</span>
+              <p class="quals__member-desc">{m.desc}</p>
+              {m.abbr === 'ACCA' && certPath && (
+                <button
+                  class="quals__cert-btn"
+                  onclick="document.getElementById('quals-cert-modal').showModal()"
+                  aria-label={l === 'ar' ? 'عرض شهادة ACCA' : 'View ACCA Certificate'}
+                >
+                  <img src={certPath} alt="ACCA Certificate" class="quals__cert-thumb" />
+                  <span>{l === 'ar' ? 'عرض الشهادة' : 'View Certificate'}</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Regulatory Approvals -->
+    <div class="quals__group" data-gsap="quals-approvals">
+      <h3 class="quals__group-heading">{c.approvals.heading}</h3>
+      <div class="quals__approvals">
+        {c.approvals.items.map((a) => (
+          <div class="quals__approval-card">
+            <div class="quals__approval-icon">{a.icon}</div>
+            <div>
+              <h4 class="quals__approval-name">{a.name}</h4>
+              <p class="quals__approval-detail">{a.detail}</p>
+              <span class="quals__approval-authority">{a.authority}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{certPath && (
+  <dialog id="quals-cert-modal" class="quals-cert-modal">
+    <button class="quals-cert-modal__close" onclick="document.getElementById('quals-cert-modal').close()" aria-label="Close">&times;</button>
+    <img src={certPath} alt="ACCA Certificate" class="quals-cert-modal__img" />
+  </dialog>
+)}
+
+<style>
+  .quals {
+    background: var(--color-bg-alt);
+  }
+
+  .quals__group {
+    margin-top: 3.5rem;
+  }
+  .quals__group-heading {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-light);
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .quals__group-heading::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  /* Professional Memberships */
+  .quals__memberships {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .quals__member-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: 2px solid var(--accent, var(--color-primary));
+    border-radius: var(--radius-md);
+    padding: 2rem 1.75rem;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .quals__member-card:hover {
+    box-shadow: var(--shadow-lg), 0 0 24px rgba(108, 63, 160, 0.1);
+    transform: translateY(-5px);
+    border-color: var(--accent, var(--color-primary));
+    border-top-width: 2px;
+  }
+  .quals__member-abbr {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: var(--accent, var(--color-primary));
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    border-radius: var(--radius-md);
+  }
+  .quals__member-body { display: flex; flex-direction: column; gap: 0.3rem; }
+  .quals__member-name {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    line-height: 1.3;
+  }
+  [dir="rtl"] .quals__member-name { font-family: var(--font-arabic-serif); }
+  .quals__member-country {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent, var(--color-primary));
+    background: color-mix(in srgb, var(--accent, var(--color-primary)) 10%, white);
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 0.5rem;
+  }
+  .quals__member-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Certificate button inside ACCA card */
+  .quals__cert-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--color-primary-50);
+    border: 1px solid rgba(108, 63, 160, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 0.45rem 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+  .quals__cert-btn:hover {
+    border-color: var(--color-primary);
+    background: rgba(108, 63, 160, 0.1);
+  }
+  .quals__cert-thumb {
+    width: 32px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  /* Certificate modal */
+  .quals-cert-modal {
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: var(--shadow-xl);
+    position: fixed;
+  }
+  .quals-cert-modal::backdrop {
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(6px);
+  }
+  .quals-cert-modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-light);
+    z-index: 1;
+  }
+  .quals-cert-modal__close:hover { color: var(--color-text-dark); }
+  .quals-cert-modal__img {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: var(--radius-lg);
+    margin-top: 1rem;
+  }
+
+  /* Regulatory Approvals */
+  .quals__approvals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .quals__approval-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    transition: var(--transition);
+  }
+  .quals__approval-card:hover {
+    box-shadow: var(--shadow-gold);
+    border-color: rgba(108, 63, 160, 0.32);
+    transform: translateY(-3px);
+  }
+  .quals__approval-icon {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--color-primary-50), var(--color-primary-100));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    border: 1px solid var(--color-primary-100);
+  }
+  .quals__approval-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    margin-bottom: 0.35rem;
+  }
+  .quals__approval-detail {
+    font-size: 0.85rem;
+    color: var(--color-text-medium);
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+  }
+  .quals__approval-authority {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+    background: var(--color-primary-50);
+    padding: 0.18rem 0.6rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-primary-100);
+  }
+
+  @media (max-width: 960px) {
+    .quals__memberships { grid-template-columns: 1fr; }
+    .quals__approvals { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .quals__memberships { grid-template-columns: 1fr; }
+    .quals__approvals { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.create({
+    trigger: '#qualifications',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('[data-gsap="quals-header"]',
+        { autoAlpha: 0, y: 40 },
+        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+      );
+    },
+  });
+
+  ScrollTrigger.create({
+    trigger: '[data-gsap="quals-memberships"]',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('[data-gsap="quals-memberships"] .quals__member-card',
+        { autoAlpha: 0, y: 50 },
+        { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out' }
+      );
+    },
+  });
+
+  ScrollTrigger.create({
+    trigger: '[data-gsap="quals-approvals"]',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('[data-gsap="quals-approvals"] .quals__approval-card',
+        { autoAlpha: 0, y: 40 },
+        { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.12, ease: 'power3.out' }
+      );
+    },
+  });
+</script>

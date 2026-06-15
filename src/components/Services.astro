@@ -1,0 +1,182 @@
+---
+import servicesData from '../data/services.json';
+
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+
+const l = lang as 'en' | 'ar';
+
+const headings = {
+  en: { badge: 'What We Offer', title: 'Our Services', sub: 'We provide comprehensive financial services tailored to meet the needs of businesses, non-profits, and individuals across Egypt.' },
+  ar: { badge: 'ما نقدمه', title: 'خدماتنا', sub: 'نقدم خدمات مالية شاملة مصممة لتلبية احتياجات الشركات والمنظمات غير الربحية والأفراد في جميع أنحاء مصر.' },
+};
+const h = headings[l] ?? headings.en;
+
+const icons: Record<string, string> = {
+  'audit-assurance': '🔍',
+  'tax-advisory': '📊',
+  'accounting-outsourcing': '📒',
+  'social-insurance': '🛡️',
+  'business-setup': '🏢',
+};
+---
+
+<section class="section section-alt" id="services">
+  <div class="container">
+    <div class="section-header" data-gsap="services-header">
+      <span class="badge">{h.badge}</span>
+      <h2>{h.title}</h2>
+      <div class="divider"></div>
+      <p>{h.sub}</p>
+    </div>
+
+    <div class="services__grid" data-gsap="services-grid">
+      {servicesData.services.map((service, i) => (
+        <article class="service-card" style={`--i: ${i}`}>
+          <div class="service-card__icon-wrap">
+            <span class="service-card__icon">{icons[service.id] ?? '📋'}</span>
+          </div>
+          <h3 class="service-card__title">{service.title[l] ?? service.title.en}</h3>
+          <p class="service-card__tagline">{(service.tagline as any)?.[l] ?? (service.tagline as any)?.en}</p>
+          <p class="service-card__desc">{service.description[l] ?? service.description.en}</p>
+          <ul class="service-card__features">
+            {((service.features as any)[l] ?? (service.features as any).en).slice(0, 4).map((feat: string) => (
+              <li>
+                <span class="service-card__check" aria-hidden="true">✓</span>
+                {feat}
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+  .service-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    padding: 2rem 1.75rem;
+    transition: var(--transition);
+    transition-delay: calc(var(--i, 0) * 0.08s);
+    position: relative;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    opacity: 0;
+    transition: var(--transition);
+  }
+  .service-card:hover {
+    box-shadow: var(--shadow-lg), var(--shadow-gold);
+    transform: translateY(-6px);
+    border-color: rgba(108, 63, 160, 0.3);
+  }
+  .service-card:hover::before { opacity: 1; }
+  .service-card__icon-wrap {
+    width: 56px;
+    height: 56px;
+    background: var(--color-primary-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(108, 63, 160, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    transition: var(--transition);
+  }
+  .service-card:hover .service-card__icon-wrap {
+    background: rgba(108, 63, 160, 0.15);
+    border-color: var(--color-primary);
+  }
+  .service-card__icon {
+    font-size: 1.75rem;
+  }
+  .service-card__title {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    color: var(--color-text-dark);
+  }
+  [dir="rtl"] .service-card__title { font-family: var(--font-arabic-serif); }
+  .service-card__tagline {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    font-style: italic;
+    margin-bottom: 0.85rem;
+    line-height: 1.45;
+    opacity: 0.9;
+  }
+  .service-card__desc {
+    font-size: 0.875rem;
+    line-height: 1.75;
+    color: var(--color-text-light);
+    margin-bottom: 1.25rem;
+  }
+  .service-card__features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+  }
+  .service-card__features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--color-text-medium);
+  }
+  .service-card__check {
+    color: var(--color-primary);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  @media (max-width: 1024px) {
+    .services__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .services__grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.create({
+    trigger: '#services',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('[data-gsap="services-header"]',
+        { autoAlpha: 0, y: 40 },
+        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+      );
+      gsap.fromTo('#services .service-card',
+        { autoAlpha: 0, y: 60 },
+        { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.12, ease: 'power3.out', delay: 0.2 }
+      );
+    },
+  });
+</script>

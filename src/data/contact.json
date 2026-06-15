@@ -1,0 +1,67 @@
+{
+  "contact": {
+    "address": {
+      "en": "Building 7W, Magdy Salama Street, La Silky District, Maadi, Cairo, Egypt",
+      "ar": "مبنى 7و، شارع مجدي سلامة، حي اللاسلكي، المعادي، القاهرة، مصر",
+      "area": "New Maadi",
+      "city": "Cairo",
+      "country": "Egypt"
+    },
+    "phones": [
+      { "number": "+20-25179678", "display": "0020-25179678", "type": "landline" },
+      { "number": "+20-1004809543", "display": "0020-100 480 95 43", "type": "mobile" }
+    ],
+    "email": "Ygalal@yg-auditors.com",
+    "workingHours": {
+      "days": { "en": "Sunday – Thursday", "ar": "الأحد – الخميس" },
+      "hours": "9:00 AM – 5:00 PM",
+      "timezone": "Cairo Time"
+    },
+    "social": {
+      "facebook": {
+        "url": "https://www.facebook.com/Youssef-Galal-ACCA-512331115638403/",
+        "label": "Facebook"
+      },
+      "linkedin": {
+        "url": "https://www.linkedin.com/in/youssef-galal-acca/",
+        "label": "LinkedIn"
+      }
+    },
+    "consultant": {
+      "heading": { "en": "Free Consultation", "ar": "استشارة مجانية" },
+      "subheading": { "en": "With No Obligation", "ar": "بدون أي التزام" },
+      "formFields": [
+        { "name": "name", "label": "Your Name", "type": "text", "required": true },
+        { "name": "email", "label": "Email Address", "type": "email", "required": true },
+        { "name": "message", "label": "Your Message", "type": "textarea", "required": true }
+      ]
+    }
+  },
+  "externalLinks": [
+    {
+      "name": "PA Global – YG Auditors Profile",
+      "url": "https://pa-global.com/locations/egypt/yg-auditors/",
+      "description": "YG Auditors official profile on PA Global international network"
+    },
+    {
+      "name": "View on Google Maps",
+      "url": "https://maps.app.goo.gl/zzPRaUH89w7HVkgR6",
+      "description": "YG-Auditors office location in Maadi, Cairo"
+    },
+    {
+      "name": "GAFI – General Authority for Investment",
+      "url": "http://www.gafi.gov.eg",
+      "description": "Egyptian investment authority for business registration"
+    },
+    {
+      "name": "Egyptian Tax Authority",
+      "url": "http://www.incometax.gov.eg",
+      "description": "Official Egyptian Income Tax Authority"
+    },
+    {
+      "name": "Egypt Government Portal",
+      "url": "https://www.egypt.gov.eg/mobile/english/home.aspx",
+      "description": "Official Egyptian government services portal"
+    }
+  ]
+}

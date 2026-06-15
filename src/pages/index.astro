@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Services from '../components/Services.astro';
+import Qualifications from '../components/Qualifications.astro';
+import Industries from '../components/Industries.astro';
+import Team from '../components/Team.astro';
+import Consultant from '../components/Consultant.astro';
+import Contact from '../components/Contact.astro';
+import TrustBanner from '../components/TrustBanner.astro';
+
+const lang = 'en';
+---
+
+<Layout
+  title="YG-Auditors | Professional Accounting & Auditing in Cairo, Egypt"
+  description="YG-Auditors is a professional accounting and auditing firm in Maadi, Cairo. ACCA-certified services: audit & assurance, tax advisory, accounting, social insurance, and business setup."
+  lang={lang}
+>
+  <Hero lang={lang} />
+  <TrustBanner lang={lang} />
+  <About lang={lang} />
+  <Services lang={lang} />
+  <Qualifications lang={lang} />
+  <Industries lang={lang} />
+  <Team lang={lang} />
+  <Consultant lang={lang} />
+  <Contact lang={lang} />
+</Layout>
