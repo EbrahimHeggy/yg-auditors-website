@@ -1,0 +1,156 @@
+---
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const l = lang as 'en' | 'ar';
+
+const content = {
+  en: { label: 'Credentials & Professional Standards' },
+  ar: { label: 'الشهادات والمعايير المهنية' },
+};
+const c = content[l] ?? content.en;
+
+const credentials = [
+  { abbr: 'ACCA',      full: 'Chartered Certified Accountants' },
+  { abbr: 'PA GLOBAL', full: 'International Accounting Network' },
+  { abbr: 'IFRS',      full: 'Financial Reporting Standards' },
+  { abbr: 'ISA',       full: 'Standards on Auditing' },
+  { abbr: 'FCCA',      full: 'Fellow Chartered Accountant' },
+  { abbr: 'GAAP',      full: 'Accepted Accounting Principles' },
+  { abbr: 'IAS',       full: 'International Accounting Standards' },
+  { abbr: 'ISAE',      full: 'Assurance Engagements Standard' },
+];
+---
+
+<section class="creds" aria-label={c.label}>
+  <p class="creds__label">{c.label}</p>
+
+  <div class="marquee" role="region" aria-label="Scrolling professional credentials">
+    <div class="marquee__fade marquee__fade--l" aria-hidden="true"></div>
+    <div class="marquee__fade marquee__fade--r" aria-hidden="true"></div>
+
+    <!-- Items are duplicated for seamless CSS loop -->
+    <div class="marquee__track" aria-hidden="true">
+      {[...credentials, ...credentials].map((item) => (
+        <div class="marquee__item">
+          <span class="marquee__sep" aria-hidden="true">◆</span>
+          <span class="marquee__abbr">{item.abbr}</span>
+          <span class="marquee__full">{item.full}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .creds {
+    padding-block: 3.5rem;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .creds__label {
+    text-align: center;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+  }
+
+  /* ── Marquee wrapper ── */
+  .marquee {
+    position: relative;
+    overflow: hidden;
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 42s linear infinite;
+    will-change: transform;
+  }
+
+  /* Pause on hover */
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  /* RTL: reverse scroll direction */
+  [dir="rtl"] .marquee__track {
+    animation-direction: reverse;
+  }
+
+  /* ── Individual item ── */
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.6rem 2.25rem;
+    white-space: nowrap;
+    cursor: default;
+  }
+
+  .marquee__item:hover .marquee__abbr {
+    color: var(--color-primary);
+  }
+
+  .marquee__item:hover .marquee__full {
+    color: var(--color-text-medium);
+  }
+
+  .marquee__sep {
+    font-size: 0.35rem;
+    color: var(--color-border-strong);
+    opacity: 0.6;
+  }
+
+  .marquee__abbr {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    letter-spacing: 0.05em;
+    transition: color 0.28s ease;
+  }
+
+  .marquee__full {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+    transition: color 0.28s ease;
+  }
+
+  /* ── Edge fade masks ── */
+  .marquee__fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 9rem;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .marquee__fade--l {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg), transparent);
+  }
+  .marquee__fade--r {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg), transparent);
+  }
+
+  @media (max-width: 640px) {
+    .marquee__fade { width: 4rem; }
+    .marquee__full { display: none; }
+    .marquee__item { padding-inline: 1.5rem; }
+  }
+</style>

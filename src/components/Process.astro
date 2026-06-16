@@ -1,0 +1,410 @@
+---
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const l = lang as 'en' | 'ar';
+
+const content = {
+  en: {
+    badge: 'How We Work',
+    title: 'Our Process',
+    sub: 'A transparent, structured approach that keeps you informed every step of the way.',
+    cta: 'Start a Conversation',
+    steps: [
+      {
+        number: 1,
+        icon: '💬',
+        title: 'Free Consultation',
+        description:
+          'We listen carefully to understand your business, identify your challenges, and explain exactly how our services can help — no commitment required.',
+      },
+      {
+        number: 2,
+        icon: '📋',
+        title: 'Engagement Planning',
+        description:
+          'We define the scope, agree on fees, and set a realistic timeline. You receive a clear engagement letter and meet your dedicated team.',
+      },
+      {
+        number: 3,
+        icon: '🔍',
+        title: 'Fieldwork & Analysis',
+        description:
+          'Our ACCA-certified professionals perform the audit, accounting, or advisory work — rigorously and in compliance with international standards.',
+      },
+      {
+        number: 4,
+        icon: '📊',
+        title: 'Report & Advisory',
+        description:
+          'You receive a professional report with clear findings, tax-saving opportunities, and actionable recommendations tailored to your business.',
+      },
+    ],
+  },
+  ar: {
+    badge: 'كيف نعمل',
+    title: 'منهجيتنا',
+    sub: 'نهج شفاف ومنظم يُبقيك على اطلاع دائم في كل خطوة.',
+    cta: 'ابدأ محادثة',
+    steps: [
+      {
+        number: 1,
+        icon: '💬',
+        title: 'استشارة مجانية',
+        description:
+          'نستمع بعناية لفهم عملك وتحديد تحدياتك وشرح كيف يمكن لخدماتنا مساعدتك — دون أي التزام مسبق.',
+      },
+      {
+        number: 2,
+        icon: '📋',
+        title: 'تخطيط الارتباط',
+        description:
+          'نحدد النطاق ونتفق على الأتعاب ونضع جدولاً زمنياً واقعياً. ستتلقى خطاباً واضحاً وتلتقي بفريقك المخصص.',
+      },
+      {
+        number: 3,
+        icon: '🔍',
+        title: 'أعمال الميدان والتحليل',
+        description:
+          'يُنفذ فريقنا المعتمد من ACCA عمليات التدقيق أو المحاسبة أو الاستشارة بدقة ووفقاً للمعايير الدولية.',
+      },
+      {
+        number: 4,
+        icon: '📊',
+        title: 'التقرير والاستشارة',
+        description:
+          'تحصل على تقرير مهني بنتائج واضحة وفرص توفير ضريبي وتوصيات قابلة للتنفيذ مصممة خصيصاً لعملك.',
+      },
+    ],
+  },
+};
+
+const c = content[l] ?? content.en;
+---
+
+<section class="process section" id="process">
+  <div class="process__bg" aria-hidden="true">
+    <div class="process__orb process__orb--1"></div>
+    <div class="process__orb process__orb--2"></div>
+  </div>
+
+  <div class="container">
+    <div class="section-header" data-gsap="process-header">
+      <span class="badge">{c.badge}</span>
+      <h2>{c.title}</h2>
+      <div class="divider"></div>
+      <p>{c.sub}</p>
+    </div>
+
+    <div class="process__timeline" id="process-timeline">
+      <!-- Vertical track: background rail + animated fill -->
+      <div class="process__track" aria-hidden="true">
+        <div class="process__track-rail"></div>
+        <div class="process__track-fill" id="process-fill"></div>
+      </div>
+
+      <ul class="process__steps">
+        {c.steps.map((step) => (
+          <li class="process__step" data-step={step.number}>
+            <!-- Circle node -->
+            <div class="process__node" aria-hidden="true">
+              <div class="process__node-outer"></div>
+              <div class="process__node-inner"></div>
+              <span class="process__node-icon">{step.icon}</span>
+            </div>
+
+            <!-- Content -->
+            <div class="process__card">
+              <span class="process__step-label">
+                {l === 'ar' ? `الخطوة ${step.number}` : `Step ${step.number}`}
+              </span>
+              <h3 class="process__step-title">{step.title}</h3>
+              <p class="process__step-desc">{step.description}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="process__cta" data-gsap="process-cta">
+      <a href="#contact" class="btn btn-primary">{c.cta}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process {
+    position: relative;
+    background: var(--color-bg-alt);
+    overflow: hidden;
+  }
+
+  /* ── Background orbs ── */
+  .process__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .process__orb {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .process__orb--1 {
+    width: 520px; height: 520px;
+    top: -120px; left: -220px;
+    background: radial-gradient(circle, var(--color-primary-50) 0%, transparent 65%);
+  }
+  .process__orb--2 {
+    width: 420px; height: 420px;
+    bottom: -100px; right: -160px;
+    background: radial-gradient(circle, var(--color-primary-50) 0%, transparent 65%);
+  }
+
+  /* ── Timeline wrapper ── */
+  .process__timeline {
+    position: relative;
+    max-width: 760px;
+    margin-inline: auto;
+    /* Push content right to make room for the track + nodes */
+    padding-inline-start: 88px;
+  }
+  [dir="rtl"] .process__timeline {
+    padding-inline-start: 0;
+    padding-inline-end: 88px;
+  }
+
+  /* ── Vertical track ── */
+  .process__track {
+    position: absolute;
+    /* horizontally centered on the nodes (node starts at left: -88px, node width 56px → center at -88+28 = -60px from card edge) */
+    left: 28px;
+    top: 28px;     /* align with first node center */
+    bottom: 28px;  /* align with last node center */
+    width: 4px;
+  }
+  [dir="rtl"] .process__track {
+    left: auto;
+    right: 28px;
+  }
+
+  .process__track-rail {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    background: var(--color-border-strong);
+    opacity: 0.5;
+  }
+  .process__track-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0%;           /* driven by GSAP scrub */
+    background: var(--color-primary);
+    border-radius: 2px;
+  }
+
+  /* ── Steps list ── */
+  .process__steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .process__step {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    opacity: 0.32;
+    transition: opacity 0.5s ease;
+  }
+  .process__step.is-active {
+    opacity: 1;
+  }
+
+  /* ── Node (circle marker on the track) ── */
+  .process__node {
+    position: absolute;
+    left: -88px;
+    top: 0;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  [dir="rtl"] .process__node {
+    left: auto;
+    right: -88px;
+  }
+
+  .process__node-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-border);
+    transition: background 0.45s ease;
+  }
+  .process__step.is-active .process__node-outer {
+    background: var(--color-primary);
+  }
+
+  .process__node-inner {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: var(--color-bg-alt);
+    border: 2px solid rgba(139, 92, 200, 0.35);
+    transition: background 0.45s ease, border-color 0.45s ease;
+  }
+  .process__step.is-active .process__node-inner {
+    background: var(--color-primary);
+    border-color: var(--color-primary-light);
+  }
+
+  .process__node-icon {
+    position: relative;
+    z-index: 1;
+    font-size: 1.25rem;
+    line-height: 1;
+    filter: grayscale(1) opacity(0.45);
+    transition: filter 0.45s ease;
+  }
+  .process__step.is-active .process__node-icon {
+    filter: grayscale(0) opacity(1);
+  }
+
+  /* ── Content card ── */
+  .process__card {
+    flex: 1;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+  .process__step.is-active .process__card {
+    border-color: rgba(139, 92, 200, 0.50);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(139, 92, 200, 0.15);
+  }
+
+  .process__step-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+    transition: color 0.5s ease;
+  }
+  .process__step.is-active .process__step-label {
+    color: var(--color-primary);
+  }
+
+  .process__step-title {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    margin-bottom: 0.65rem;
+    line-height: 1.25;
+  }
+  [dir="rtl"] .process__step-title { font-family: var(--font-arabic-serif); }
+
+  .process__step-desc {
+    font-size: 0.93rem;
+    color: var(--color-text-medium);
+    line-height: 1.75;
+  }
+
+  /* ── CTA ── */
+  .process__cta {
+    text-align: center;
+    margin-top: 4rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .process__timeline {
+      padding-inline-start: 64px;
+    }
+    [dir="rtl"] .process__timeline {
+      padding-inline-start: 0;
+      padding-inline-end: 64px;
+    }
+    .process__track {
+      left: 20px;
+    }
+    [dir="rtl"] .process__track {
+      left: auto;
+      right: 20px;
+    }
+    .process__node {
+      left: -64px;
+      width: 44px;
+      height: 44px;
+    }
+    [dir="rtl"] .process__node {
+      left: auto;
+      right: -64px;
+    }
+    .process__node-icon { font-size: 1rem; }
+    .process__steps { gap: 2rem; }
+    .process__card { padding: 1.25rem 1.35rem; }
+    .process__track {
+      top: 22px;
+      bottom: 22px;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Section header slides in on enter
+  ScrollTrigger.create({
+    trigger: '#process',
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo(
+        '[data-gsap="process-header"]',
+        { autoAlpha: 0, y: 40 },
+        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+      );
+      gsap.fromTo(
+        '[data-gsap="process-cta"]',
+        { autoAlpha: 0, y: 20 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.25 }
+      );
+    },
+  });
+
+  // Progress bar fill driven by scroll position through the timeline
+  gsap.to('#process-fill', {
+    height: '100%',
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#process-timeline',
+      start: 'top 60%',
+      end: 'bottom 60%',
+      scrub: 0.4,
+    },
+  });
+
+  // Each step activates as it enters the viewport
+  document.querySelectorAll<HTMLElement>('.process__step').forEach((step) => {
+    ScrollTrigger.create({
+      trigger: step,
+      start: 'top 68%',
+      once: true,
+      onEnter: () => step.classList.add('is-active'),
+    });
+  });
+</script>
