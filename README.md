@@ -194,9 +194,3 @@ All content changes go through the JSON data files — no component code edits n
 | Contact info | `src/data/contact.json` |
 
 ---
-
-## 📄 License
-
-© 2025 Youssef Galal Accounting & Auditing Office. All rights reserved.
-
-Developed by **Trioplus**.
