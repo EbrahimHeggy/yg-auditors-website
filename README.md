@@ -6,88 +6,40 @@
 
 [![Astro](https://img.shields.io/badge/Astro-FF5D01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)](https://gsap.com)
 
 </div>
 
 ---
 
-## ✨ Features
+## Features
 
-- **Bilingual (EN / AR)** — full English and Arabic content with RTL layout support for Arabic
-- **GSAP scroll animations** — smooth entrance and parallax effects on all major sections
-- **Data-driven content** — all copy, services, team, and industries managed in JSON files under `src/data/`
-- **Component architecture** — every page section is an isolated Astro component
-- **Scoped CSS** — per-component styles, no global CSS conflicts
-- **Tailwind CSS v4** — utility classes available via the Vite plugin (no config file needed)
+- **Bilingual (EN / AR)** — full English and Arabic content with RTL layout support
+- **GSAP scroll animations** — entrance and parallax effects on every section via ScrollTrigger
+- **Interactive globe** — canvas-rendered spinning globe in the Services section; Egyptian city names appear one-by-one at random positions across the sphere and fade in/out independently
+- **Component architecture** — every page section is an isolated Astro component with scoped CSS
+- **Data-driven content** — copy, services, team, and industry data managed in `src/data/` JSON files
+- **Dark theme** — unified dark palette (`#08091A`) with purple accent throughout
 - **Static output** — zero server runtime; deploys to any static host
 
 ---
 
-## 🏗️ Architecture
+## Tech Stack
 
-```mermaid
-graph TB
-    subgraph Pages["📄 Pages"]
-        INDEX[index.astro]
-    end
-
-    subgraph Layout["🖼️ Layout"]
-        L[Layout.astro]
-    end
-
-    subgraph Components["🧩 Components"]
-        HEADER[Header]
-        HERO[Hero]
-        ABOUT[About]
-        SERVICES[Services]
-        INDUSTRIES[Industries]
-        TEAM[Team]
-        QUALIFICATIONS[Qualifications]
-        TRUST[TrustBanner]
-        CONSULTANT[Consultant]
-        CONTACT[Contact]
-        FOOTER[Footer]
-    end
-
-    subgraph Data["🗄️ Data (JSON)"]
-        BRAND[brand.json]
-        COMPANY[company.json]
-        SERVICES_D[services.json]
-        INDUSTRIES_D[industries.json]
-        TEAM_D[team.json]
-        CONTACT_D[contact.json]
-    end
-
-    INDEX --> L
-    L --> HEADER & HERO & ABOUT & SERVICES & INDUSTRIES & TEAM & QUALIFICATIONS & TRUST & CONSULTANT & CONTACT & FOOTER
-    SERVICES --> SERVICES_D
-    INDUSTRIES --> INDUSTRIES_D
-    ABOUT --> COMPANY
-    HEADER & FOOTER --> BRAND
-    TEAM --> TEAM_D
-    CONTACT --> CONTACT_D
-```
-
----
-
-## 🛠️ Tech Stack
-
-| Category | Technologies |
-|----------|-------------|
+| Category | Technology |
+|----------|------------|
 | **Framework** | Astro 6.4 (static output) |
-| **Language** | TypeScript 5.6 (strict mode) |
-| **Styling** | Tailwind CSS 4.3 (via Vite plugin), scoped component CSS |
-| **Animations** | GSAP 3.15, AOS 2.3, Motion 12 |
+| **Language** | TypeScript 5 |
+| **Styling** | Scoped component CSS + CSS custom properties |
+| **Animations** | GSAP 3.15 + ScrollTrigger |
+| **Canvas** | Native Canvas 2D API (globe) |
 | **Fonts** | Inter (EN), Cairo (AR) |
-| **i18n** | Astro built-in i18n routing (EN default, AR) |
 | **Build tool** | Vite (via Astro) |
-| **Deploy target** | Static hosting (e.g., Netlify, Vercel, cPanel) |
+| **Deploy target** | Static hosting (Netlify, Vercel, cPanel) |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 yg-auditors-website/
@@ -96,101 +48,69 @@ yg-auditors-website/
 │   │   ├── Header.astro
 │   │   ├── Hero.astro
 │   │   ├── About.astro
-│   │   ├── Services.astro
-│   │   ├── Industries.astro
-│   │   ├── Team.astro
-│   │   ├── Qualifications.astro
 │   │   ├── TrustBanner.astro
-│   │   ├── Consultant.astro
+│   │   ├── LogoMarquee.astro
+│   │   ├── Services.astro    # Interactive globe canvas
+│   │   ├── Process.astro
+│   │   ├── Industries.astro
+│   │   ├── Qualifications.astro
+│   │   ├── Team.astro
+│   │   ├── Consultant.astro  # Free consultation form
 │   │   ├── Contact.astro
 │   │   └── Footer.astro
-│   ├── data/                 # All site content as JSON
-│   │   ├── brand.json        # Colors, fonts, logo, languages
-│   │   ├── company.json      # Mission, vision, stats
-│   │   ├── services.json     # 5 service offerings (EN + AR)
-│   │   ├── industries.json   # 3 client categories (EN + AR)
-│   │   ├── team.json         # Team member profiles
-│   │   └── contact.json      # Address, phone, email
+│   ├── data/                 # Site content as JSON
+│   │   ├── brand.json
+│   │   ├── company.json
+│   │   ├── services.json
+│   │   ├── industries.json
+│   │   ├── team.json
+│   │   └── contact.json
 │   ├── layouts/
 │   │   └── Layout.astro      # Root HTML shell, global fonts
 │   ├── pages/
-│   │   └── index.astro       # Single-page site entry point
+│   │   ├── index.astro       # English
+│   │   └── index-a.astro     # Arabic
 │   └── styles/
-│       └── global.css        # CSS custom properties, resets
+│       └── global.css        # CSS custom properties, resets, shared utilities
 ├── public/                   # Static assets (images, favicon, PDF)
-├── astro.config.mjs          # Astro + i18n + Vite/Tailwind config
-├── tsconfig.json             # Path aliases (@data, @components, @layouts)
+├── astro.config.mjs
 └── package.json
 ```
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
-### Prerequisites
-
-- Node.js 18+
-- npm 9+
-
-### Installation
+**Prerequisites:** Node.js 18+, npm 9+
 
 ```bash
-# Clone the repository
 git clone <repo-url>
 cd yg-auditors-website
-
-# Install dependencies
 npm install
-
-# Start the development server
-npm run dev
+npm run dev        # http://localhost:4321
 ```
-
-Open [http://localhost:4321](http://localhost:4321) in your browser.
-
-### Build for production
 
 ```bash
-npm run build       # outputs to dist/
-npm run preview     # preview the production build locally
+npm run build      # outputs to dist/
+npm run preview    # preview production build
 ```
 
 ---
 
-## 🌐 Internationalization
+## Internationalization
 
-The site uses Astro's built-in i18n with two locales:
+| Page | Language | Direction |
+|------|----------|-----------|
+| `/index.html` | English | LTR |
+| `/index-a.html` | Arabic | RTL |
 
-| Locale | Language | Direction |
-|--------|----------|-----------|
-| `en` (default) | English | LTR |
-| `ar` | Arabic | RTL |
-
-All user-facing strings live in the JSON files under `src/data/` as `{ "en": "...", "ar": "..." }` objects. Components receive the active locale and render the appropriate string.
+Each component accepts a `lang` prop (`"en"` or `"ar"`) and renders the matching content from its inline content object or the JSON data files.
 
 ---
 
-## 📦 Deployment
+## Deployment
 
-The site outputs fully static HTML to `dist/` after `npm run build`. Deploy to any static host:
+After `npm run build`, upload the `dist/` folder to any static host:
 
-- **Netlify / Vercel** — connect the repo; set build command `npm run build`, publish dir `dist`
-- **cPanel / shared hosting** — upload the contents of `dist/` to `public_html`
-- **Custom domain** — configured in `astro.config.mjs` under `site: 'https://yg-auditors.com'`
-
----
-
-## 🔧 Customizing Content
-
-All content changes go through the JSON data files — no component code edits needed for copy updates:
-
-| What to change | File |
-|----------------|------|
-| Brand colors, logo, fonts | `src/data/brand.json` |
-| Company mission, stats | `src/data/company.json` |
-| Services (add/edit/remove) | `src/data/services.json` |
-| Industries served | `src/data/industries.json` |
-| Team members | `src/data/team.json` |
-| Contact info | `src/data/contact.json` |
-
----
+- **Netlify / Vercel** — connect repo; build command `npm run build`, publish dir `dist`
+- **cPanel / shared hosting** — upload contents of `dist/` to `public_html`
