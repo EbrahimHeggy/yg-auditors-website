@@ -11,6 +11,7 @@ const content = {
     title: 'Our Process',
     sub: 'A transparent, structured approach that keeps you informed every step of the way.',
     cta: 'Start a Conversation',
+    hint: 'Hover or tap a step to read more',
     steps: [
       {
         number: 1,
@@ -47,6 +48,7 @@ const content = {
     title: 'منهجيتنا',
     sub: 'نهج شفاف ومنظم يُبقيك على اطلاع دائم في كل خطوة.',
     cta: 'ابدأ محادثة',
+    hint: 'مرّر الفأرة أو اضغط على خطوة لقراءة التفاصيل',
     steps: [
       {
         number: 1,
@@ -81,6 +83,16 @@ const content = {
 };
 
 const c = content[l] ?? content.en;
+
+// Anchor points (% of the track) the zigzag path passes through — the SVG
+// path below uses the same coordinates (scaled to a 1000x200 viewBox) so
+// each node sits exactly on the line.
+const points = [
+  { x: 4, y: 70 },
+  { x: 32, y: 30 },
+  { x: 60, y: 70 },
+  { x: 88, y: 30 },
+];
 ---
 
 <section class="process section" id="process">
@@ -98,34 +110,56 @@ const c = content[l] ?? content.en;
     </div>
 
     <div class="process__timeline" id="process-timeline">
-      <!-- Vertical track: background rail + animated fill -->
-      <div class="process__track" aria-hidden="true">
-        <div class="process__track-rail"></div>
-        <div class="process__track-fill" id="process-fill"></div>
+      <div class="process__track">
+        <!-- Curved connecting path: passes through each node's exact center -->
+        <svg
+          class="process__path"
+          viewBox="0 0 1000 200"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            class="process__path-base"
+            d="M 40,140 C 180,140 180,60 320,60 C 460,60 460,140 600,140 C 740,140 740,60 880,60"
+            fill="none"
+          />
+          <path
+            class="process__path-flow"
+            d="M 40,140 C 180,140 180,60 320,60 C 460,60 460,140 600,140 C 740,140 740,60 880,60"
+            fill="none"
+            pathLength="1"
+          />
+        </svg>
+
+        <ul class="process__steps">
+          {c.steps.map((step, i) => (
+            <li
+              class="process__step"
+              style={`--i:${i}; left:${points[i].x}%; top:${points[i].y}%;`}
+              data-step={step.number}
+            >
+              <button type="button" class="process__node" aria-expanded="false">
+                <span class="process__node-pulse" aria-hidden="true"></span>
+                <span class="process__node-outer" aria-hidden="true"></span>
+                <span class="process__node-inner" aria-hidden="true">
+                  <span class="process__node-icon">{step.icon}</span>
+                </span>
+                <span class="sr-only">
+                  {l === 'ar' ? `الخطوة ${step.number}: ${step.title}` : `Step ${step.number}: ${step.title}`}
+                </span>
+              </button>
+
+              <div class="process__info">
+                <span class="process__name">{step.title}</span>
+                <p class="process__desc">{step.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <ul class="process__steps">
-        {c.steps.map((step) => (
-          <li class="process__step" data-step={step.number}>
-            <!-- Circle node -->
-            <div class="process__node" aria-hidden="true">
-              <div class="process__node-outer"></div>
-              <div class="process__node-inner"></div>
-              <span class="process__node-icon">{step.icon}</span>
-            </div>
-
-            <!-- Content -->
-            <div class="process__card">
-              <span class="process__step-label">
-                {l === 'ar' ? `الخطوة ${step.number}` : `Step ${step.number}`}
-              </span>
-              <h3 class="process__step-title">{step.title}</h3>
-              <p class="process__step-desc">{step.description}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
     </div>
+
+    <p class="process__hint">{c.hint}</p>
 
     <div class="process__cta" data-gsap="process-cta">
       <a href="#contact" class="btn btn-primary">{c.cta}</a>
@@ -138,6 +172,15 @@ const c = content[l] ?? content.en;
     position: relative;
     background: var(--color-bg-alt);
     overflow: hidden;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   /* ── Background orbs ── */
@@ -162,93 +205,101 @@ const c = content[l] ?? content.en;
   }
 
   /* ── Timeline wrapper ── */
+  /* Fully responsive (no min-width) so the path, dots, and text are
+     always visible without needing to scroll horizontally. */
   .process__timeline {
-    position: relative;
-    max-width: 760px;
+    width: 100%;
+    max-width: 1100px;
     margin-inline: auto;
-    /* Push content right to make room for the track + nodes */
-    padding-inline-start: 88px;
-  }
-  [dir="rtl"] .process__timeline {
-    padding-inline-start: 0;
-    padding-inline-end: 88px;
+    padding-block: 2rem 8rem;
   }
 
-  /* ── Vertical track ── */
+  /* The track defines the exact coordinate box that both the SVG curve
+     and the absolutely-positioned nodes share, so a node at left:X%/top:Y%
+     always lands precisely on the matching point of the path. */
   .process__track {
-    position: absolute;
-    /* horizontally centered on the nodes (node starts at left: -88px, node width 56px → center at -88+28 = -60px from card edge) */
-    left: 28px;
-    top: 28px;     /* align with first node center */
-    bottom: 28px;  /* align with last node center */
-    width: 4px;
-  }
-  [dir="rtl"] .process__track {
-    left: auto;
-    right: 28px;
+    position: relative;
+    width: 100%;
+    height: 200px;
   }
 
-  .process__track-rail {
+  /* ── Curved SVG path ── */
+  .process__path {
     position: absolute;
     inset: 0;
-    border-radius: 2px;
-    background: var(--color-border-strong);
-    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
   }
-  .process__track-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 0%;           /* driven by GSAP scrub */
-    background: var(--color-primary);
-    border-radius: 2px;
+  .process__path-base {
+    stroke: var(--color-primary);
+    stroke-width: 3;
+    opacity: 0.9;
+  }
+  .process__path-flow {
+    stroke: var(--color-primary-light);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 0.05 0.2;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 6px var(--color-primary-light));
+    animation: process-flow 2.6s linear infinite;
   }
 
-  /* ── Steps list ── */
+  @keyframes process-flow {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -1; }
+  }
+
+  /* ── Steps: each node sits exactly on the curve at (--i)'s point ── */
   .process__steps {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
+    position: absolute;
+    inset: 0;
   }
 
   .process__step {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    opacity: 0.32;
-    transition: opacity 0.5s ease;
-  }
-  .process__step.is-active {
-    opacity: 1;
+    position: absolute;
+    /* left/top set inline per step to match the path's coordinates */
   }
 
-  /* ── Node (circle marker on the track) ── */
+  /* ── Node (circle marker on the path) ── */
   .process__node {
     position: absolute;
-    left: -88px;
     top: 0;
-    width: 56px;
-    height: 56px;
+    left: 0;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 2;
   }
-  [dir="rtl"] .process__node {
-    left: auto;
-    right: -88px;
+
+  .process__node-pulse {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    animation: process-pulse 2.4s ease-out infinite;
+    animation-delay: calc(var(--i, 0) * 0.3s);
+  }
+
+  @keyframes process-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(176, 125, 228, 0.55); }
+    70%  { box-shadow: 0 0 0 14px rgba(176, 125, 228, 0); }
+    100% { box-shadow: 0 0 0 14px rgba(176, 125, 228, 0); }
   }
 
   .process__node-outer {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: var(--color-border);
-    transition: background 0.45s ease;
-  }
-  .process__step.is-active .process__node-outer {
     background: var(--color-primary);
   }
 
@@ -257,107 +308,117 @@ const c = content[l] ?? content.en;
     inset: 5px;
     border-radius: 50%;
     background: var(--color-bg-alt);
-    border: 2px solid rgba(139, 92, 200, 0.35);
-    transition: background 0.45s ease, border-color 0.45s ease;
-  }
-  .process__step.is-active .process__node-inner {
-    background: var(--color-primary);
-    border-color: var(--color-primary-light);
+    border: 2px solid var(--color-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .process__node-icon {
-    position: relative;
-    z-index: 1;
-    font-size: 1.25rem;
-    line-height: 1;
-    filter: grayscale(1) opacity(0.45);
-    transition: filter 0.45s ease;
-  }
-  .process__step.is-active .process__node-icon {
-    filter: grayscale(0) opacity(1);
-  }
-
-  /* ── Content card ── */
-  .process__card {
-    flex: 1;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1.75rem 2rem;
-    transition: border-color 0.5s ease, box-shadow 0.5s ease;
-  }
-  .process__step.is-active .process__card {
-    border-color: rgba(139, 92, 200, 0.50);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(139, 92, 200, 0.15);
-  }
-
-  .process__step-label {
-    display: block;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--color-text-light);
-    margin-bottom: 0.5rem;
-    transition: color 0.5s ease;
-  }
-  .process__step.is-active .process__step-label {
-    color: var(--color-primary);
-  }
-
-  .process__step-title {
-    font-family: var(--font-serif);
     font-size: 1.2rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .process__node:hover .process__node-inner,
+  .process__node:focus-visible .process__node-inner,
+  .process__step.is-open .process__node-inner {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+  }
+
+  .process__node:focus-visible {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: 4px;
+    border-radius: 50%;
+  }
+
+  /* ── Info block: name always visible, description on demand ── */
+  .process__info {
+    position: absolute;
+    top: 36px;
+    left: 50%;
+    transform: translate(calc(-50% + var(--shift, 0px)), 0);
+    width: max-content;
+    max-width: 190px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 3;
+  }
+
+  .process__name {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--color-text-dark);
-    margin-bottom: 0.65rem;
-    line-height: 1.25;
+    line-height: 1.3;
   }
-  [dir="rtl"] .process__step-title { font-family: var(--font-arabic-serif); }
+  [dir="rtl"] .process__name { font-family: var(--font-arabic-serif); }
 
-  .process__step-desc {
-    font-size: 0.93rem;
+  .process__desc {
+    font-size: 0.82rem;
     color: var(--color-text-medium);
-    line-height: 1.75;
+    line-height: 1.6;
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.35s ease;
   }
 
-  /* ── CTA ── */
+  .process__step:hover .process__desc,
+  .process__step:focus-within .process__desc,
+  .process__step.is-open .process__desc {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Hint + CTA ── */
+  .process__hint {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+  }
+
   .process__cta {
     text-align: center;
-    margin-top: 4rem;
+    margin-top: 2.5rem;
   }
 
-  /* ── Responsive ── */
+  /* ── Responsive: shrink to fit, never requires horizontal scrolling ── */
+  @media (max-width: 1100px) {
+    .process__timeline {
+      padding-inline: 2rem;
+    }
+  }
+
   @media (max-width: 640px) {
     .process__timeline {
-      padding-inline-start: 64px;
-    }
-    [dir="rtl"] .process__timeline {
-      padding-inline-start: 0;
-      padding-inline-end: 64px;
+      padding-block: 1.5rem 9rem;
+      padding-inline: 0.5rem;
     }
     .process__track {
-      left: 20px;
-    }
-    [dir="rtl"] .process__track {
-      left: auto;
-      right: 20px;
+      height: 150px;
     }
     .process__node {
-      left: -64px;
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
     }
-    [dir="rtl"] .process__node {
-      left: auto;
-      right: -64px;
-    }
-    .process__node-icon { font-size: 1rem; }
-    .process__steps { gap: 2rem; }
-    .process__card { padding: 1.25rem 1.35rem; }
-    .process__track {
-      top: 22px;
-      bottom: 22px;
+    .process__node-icon { font-size: 0.95rem; }
+    .process__info { top: 30px; max-width: 130px; }
+    .process__name { font-size: 0.8rem; }
+    .process__desc { font-size: 0.72rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process__path-flow,
+    .process__node-pulse {
+      animation: none;
     }
   }
 </style>
@@ -386,25 +447,52 @@ const c = content[l] ?? content.en;
     },
   });
 
-  // Progress bar fill driven by scroll position through the timeline
-  gsap.to('#process-fill', {
-    height: '100%',
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#process-timeline',
-      start: 'top 60%',
-      end: 'bottom 60%',
-      scrub: 0.4,
-    },
+  // Tap-to-toggle description support for touch devices
+  const steps = document.querySelectorAll<HTMLElement>('.process__step');
+
+  const closeAll = (except?: HTMLElement) => {
+    steps.forEach((step) => {
+      if (step !== except) {
+        step.classList.remove('is-open');
+        step.querySelector('.process__node')?.setAttribute('aria-expanded', 'false');
+        step.querySelector<HTMLElement>('.process__info')?.style.removeProperty('--shift');
+      }
+    });
+  };
+
+  // Keep the info block fully inside the browser viewport so the full
+  // description is always readable without needing to scroll.
+  const clampInfo = (step: HTMLElement) => {
+    const info = step.querySelector<HTMLElement>('.process__info');
+    if (!info) return;
+    info.style.setProperty('--shift', '0px');
+    const rect = info.getBoundingClientRect();
+    const margin = 12;
+    let shift = 0;
+    if (rect.left < margin) {
+      shift = margin - rect.left;
+    } else if (rect.right > window.innerWidth - margin) {
+      shift = window.innerWidth - margin - rect.right;
+    }
+    info.style.setProperty('--shift', `${shift}px`);
+  };
+
+  steps.forEach((step) => {
+    const node = step.querySelector('.process__node');
+    node?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = step.classList.contains('is-open');
+      closeAll(step);
+      step.classList.toggle('is-open', !isOpen);
+      node.setAttribute('aria-expanded', String(!isOpen));
+      if (!isOpen) clampInfo(step);
+    });
+    step.addEventListener('mouseenter', () => clampInfo(step));
+    step.addEventListener('focusin', () => clampInfo(step));
   });
 
-  // Each step activates as it enters the viewport
-  document.querySelectorAll<HTMLElement>('.process__step').forEach((step) => {
-    ScrollTrigger.create({
-      trigger: step,
-      start: 'top 68%',
-      once: true,
-      onEnter: () => step.classList.add('is-active'),
-    });
+  document.addEventListener('click', () => closeAll());
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAll();
   });
 </script>

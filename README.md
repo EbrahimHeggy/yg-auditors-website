@@ -16,7 +16,8 @@
 
 - **Bilingual (EN / AR)** — full English and Arabic content with RTL layout support
 - **GSAP scroll animations** — entrance and parallax effects on every section via ScrollTrigger
-- **Interactive globe** — canvas-rendered spinning globe in the Services section; Egyptian city names appear one-by-one at random positions across the sphere and fade in/out independently
+- **Living Earth globe** — reusable canvas-rendered spinning globe (`LivingEarth.astro`) used as both the Hero background and the Services panel; Egyptian city names appear one-by-one at random positions across the sphere and fade in/out independently, draggable by mouse/touch
+- **Animated process timeline** — `Process.astro` renders a zigzag SVG path with a continuously flowing light effect and pulsing dots; each dot sits exactly on the curve, shows its step name underneath, and reveals the full description on hover/tap
 - **Component architecture** — every page section is an isolated Astro component with scoped CSS
 - **Data-driven content** — copy, services, team, and industry data managed in `src/data/` JSON files
 - **Dark theme** — unified dark palette (`#08091A`) with purple accent throughout
@@ -50,8 +51,9 @@ yg-auditors-website/
 │   │   ├── About.astro
 │   │   ├── TrustBanner.astro
 │   │   ├── LogoMarquee.astro
-│   │   ├── Services.astro    # Interactive globe canvas
-│   │   ├── Process.astro
+│   │   ├── Services.astro    # Uses LivingEarth (panel variant)
+│   │   ├── LivingEarth.astro # Reusable canvas globe (hero + panel variants)
+│   │   ├── Process.astro     # Animated zigzag process timeline
 │   │   ├── Industries.astro
 │   │   ├── Qualifications.astro
 │   │   ├── Team.astro

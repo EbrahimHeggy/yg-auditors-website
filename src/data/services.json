@@ -2,176 +2,150 @@
   "services": [
     {
       "id": "audit-assurance",
-      "icon": "audit.png",
-      "iconClass": "fa-search-dollar",
       "title": {
         "en": "Audit & Assurance",
-        "ar": "خدمات المراجعة والتدقيق"
+        "ar": "المراجعة والتدقيق"
       },
       "tagline": {
-        "en": "Independent expertise to improve the quality of information",
-        "ar": "خبرة مستقلة لتحسين جودة المعلومات المالية"
+        "en": "Accuracy you can trust",
+        "ar": "دقة يمكنك الاعتماد عليها"
       },
       "description": {
-        "en": "Methodical financial statement reviews with internal control assessment and compliance reporting. We conduct audits in accordance with Egyptian and International Auditing Standards.",
-        "ar": "مراجعة منهجية للقوائم المالية مع تقييم الرقابة الداخلية وإعداد تقارير الامتثال وفقاً للمعايير المصرية والدولية للمراجعة."
+        "en": "Professional audit services helping businesses improve transparency, compliance, and financial confidence.",
+        "ar": "خدمات مراجعة احترافية تساعد الشركات على تحسين الشفافية والالتزام والثقة المالية."
       },
       "features": {
         "en": [
-          "Financial statement review & audit",
-          "Internal control assessment",
-          "Compliance reporting",
-          "Risk-based audit approach",
-          "Egyptian & International Standards",
-          "Audit reports for regulatory bodies"
+          "Financial statement audits",
+          "Internal control reviews",
+          "Risk assessment",
+          "Compliance assurance"
         ],
         "ar": [
-          "مراجعة وتدقيق القوائم المالية",
-          "تقييم الرقابة الداخلية",
-          "إعداد تقارير الامتثال",
-          "المراجعة القائمة على المخاطر",
-          "المعايير المصرية والدولية للمراجعة",
-          "تقارير المراجعة للجهات الرقابية"
+          "مراجعة القوائم المالية",
+          "مراجعة الرقابة الداخلية",
+          "تقييم المخاطر",
+          "ضمان الالتزام"
         ]
       }
     },
+
     {
       "id": "tax-advisory",
-      "icon": "tax.png",
-      "iconClass": "fa-file-invoice-dollar",
       "title": {
         "en": "Tax Advisory",
-        "ar": "الخدمات الضريبية"
+        "ar": "الاستشارات الضريبية"
       },
       "tagline": {
-        "en": "Balancing compliance and strategy with precision",
-        "ar": "الموازنة بين الامتثال والاستراتيجية الضريبية بدقة"
+        "en": "Smart tax solutions",
+        "ar": "حلول ضريبية ذكية"
       },
       "description": {
-        "en": "Comprehensive tax preparation and advisory services. We represent clients before Egyptian Tax Authorities covering income tax, VAT, salaries, and stamp duties.",
-        "ar": "خدمات الاستشارة الضريبية وإعداد الإقرارات الضريبية وتمثيل العملاء أمام مصلحة الضرائب المصرية في ضريبة الدخل والقيمة المضافة وضرائب الرواتب والدمغة."
+        "en": "Helping companies manage tax obligations efficiently while reducing risks.",
+        "ar": "نساعد الشركات على إدارة الالتزامات الضريبية بكفاءة وتقليل المخاطر."
       },
       "features": {
         "en": [
-          "Income tax preparation & filing",
-          "VAT registration & returns",
-          "Salary tax management",
-          "Stamp duty compliance",
-          "Tax authority representation",
-          "Tax dispute resolution"
+          "Tax planning",
+          "Tax filing support",
+          "Tax compliance",
+          "Tax consulting"
         ],
         "ar": [
-          "إعداد وتقديم إقرارات ضريبة الدخل",
-          "تسجيل ضريبة القيمة المضافة والإقرارات",
-          "إدارة ضريبة الرواتب",
-          "الامتثال لضريبة الدمغة",
-          "التمثيل أمام مصلحة الضرائب المصرية",
-          "حل النزاعات الضريبية"
+          "التخطيط الضريبي",
+          "دعم الإقرارات الضريبية",
+          "الالتزام الضريبي",
+          "الاستشارات الضريبية"
         ]
       }
     },
+
     {
       "id": "accounting-outsourcing",
-      "icon": "accounting.png",
-      "iconClass": "fa-calculator",
       "title": {
-        "en": "Accounting & Outsourcing",
-        "ar": "خدمات المحاسبة والاستعانة بمصادر خارجية"
+        "en": "Accounting Outsourcing",
+        "ar": "خدمات المحاسبة الخارجية"
       },
       "tagline": {
-        "en": "Clarity and control for every financial transaction",
-        "ar": "وضوح وتحكم في كل معاملة مالية"
+        "en": "Your finance team extension",
+        "ar": "امتداد لفريقك المالي"
       },
       "description": {
-        "en": "Full-service bookkeeping, payroll processing, financial statement preparation, and accounting system design and setup tailored to your business needs.",
-        "ar": "خدمات كاملة للمسك بالدفاتر وإعداد الرواتب وإعداد القوائم المالية وتصميم وتنفيذ الأنظمة المحاسبية المناسبة لاحتياجات عملك."
+        "en": "Complete accounting solutions allowing businesses to focus on growth.",
+        "ar": "حلول محاسبية متكاملة تساعد الشركات على التركيز على النمو."
       },
       "features": {
         "en": [
-          "Bookkeeping & record keeping",
-          "Payroll processing & management",
-          "Financial statement preparation",
-          "Accounting system design",
-          "Monthly & annual reporting",
-          "Management accounts"
+          "Bookkeeping",
+          "Financial reports",
+          "Payroll accounting",
+          "Monthly closing"
         ],
         "ar": [
-          "مسك الدفاتر وحفظ السجلات",
-          "معالجة وإدارة الرواتب",
-          "إعداد القوائم المالية",
-          "تصميم وتطوير الأنظمة المحاسبية",
-          "التقارير الشهرية والسنوية",
-          "الحسابات الإدارية"
+          "مسك الدفاتر",
+          "التقارير المالية",
+          "محاسبة الرواتب",
+          "الإقفال الشهري"
         ]
       }
     },
+
     {
       "id": "social-insurance",
-      "icon": "baseline.png",
-      "iconClass": "fa-shield-alt",
       "title": {
-        "en": "Social Insurance",
+        "en": "Social Insurance Services",
         "ar": "خدمات التأمينات الاجتماعية"
       },
       "tagline": {
-        "en": "Protecting your workforce, ensuring full compliance",
-        "ar": "حماية قوتك العاملة وضمان الامتثال الكامل"
+        "en": "Employee compliance made easy",
+        "ar": "سهولة الالتزام بحقوق الموظفين"
       },
       "description": {
-        "en": "Complete social insurance management including entity registration and employee subscription management under the applicable schemes in Egypt.",
-        "ar": "إدارة شاملة للتأمينات الاجتماعية تشمل تسجيل المنشآت وإدارة اشتراكات الموظفين وفق الأنظمة المعمول بها في مصر."
+        "en": "Managing social insurance procedures and employee records professionally.",
+        "ar": "إدارة إجراءات التأمينات الاجتماعية وملفات الموظفين بشكل احترافي."
       },
       "features": {
         "en": [
-          "Company registration with social insurance",
-          "Employee enrollment & management",
-          "Social insurance calculations",
-          "Subscription payment processing",
-          "Employee addition & removal",
-          "Compliance with Egyptian law"
+          "Employee registration",
+          "Insurance procedures",
+          "Government follow-up",
+          "Compliance management"
         ],
         "ar": [
-          "تسجيل الشركات في التأمينات الاجتماعية",
-          "تسجيل وإدارة الموظفين",
-          "احتساب اشتراكات التأمينات الاجتماعية",
-          "معالجة مدفوعات الاشتراكات",
-          "إضافة وإلغاء قيد الموظفين",
-          "الامتثال للقانون المصري"
+          "تسجيل الموظفين",
+          "إجراءات التأمينات",
+          "المتابعة الحكومية",
+          "إدارة الالتزام"
         ]
       }
     },
+
     {
       "id": "business-setup",
-      "icon": "business.png",
-      "iconClass": "fa-building",
       "title": {
-        "en": "Business Set-up Services",
-        "ar": "خدمات تأسيس الأعمال"
+        "en": "Business Setup",
+        "ar": "تأسيس الشركات"
       },
       "tagline": {
-        "en": "Your trusted gateway to the Egyptian market",
-        "ar": "بوابتك الموثوقة إلى السوق المصرية"
+        "en": "Start your business confidently",
+        "ar": "ابدأ مشروعك بثقة"
       },
       "description": {
-        "en": "Expert guidance and assistance in establishing your business in Egypt. We handle sole trades, partnerships, LLCs, joint-stock companies, and NGOs.",
-        "ar": "إرشادات ومساعدة متخصصة في تأسيس الأعمال في مصر، سواء كانت منشآت فردية أو شراكات أو شركات ذات مسؤولية محدودة أو مساهمة أو منظمات غير ربحية."
+        "en": "Complete support for establishing companies and preparing legal documents.",
+        "ar": "دعم كامل لتأسيس الشركات وتجهيز المستندات القانونية."
       },
       "features": {
         "en": [
-          "Sole trader registration",
-          "Partnership formation",
-          "LLC incorporation",
-          "Joint-stock company formation",
-          "NGO registration",
-          "GAFI registration support"
+          "Company registration",
+          "Legal documentation",
+          "Business consulting",
+          "Startup support"
         ],
         "ar": [
-          "تسجيل المنشآت الفردية",
-          "تأسيس الشراكات التجارية",
-          "تأسيس الشركات ذات المسؤولية المحدودة",
-          "تأسيس شركات المساهمة",
-          "تسجيل المنظمات غير الربحية",
-          "دعم التسجيل لدى هيئة الاستثمار (GAFI)"
+          "تسجيل الشركات",
+          "المستندات القانونية",
+          "استشارات الأعمال",
+          "دعم الشركات الناشئة"
         ]
       }
     }

@@ -1,0 +1,457 @@
+---
+interface Props {
+  id: string;
+  variant?: 'hero' | 'panel';
+  scrollTarget?: string;
+}
+const { id, variant = 'panel', scrollTarget = '' } = Astro.props;
+---
+
+<div
+  class="living-earth"
+  data-living-earth
+  data-variant={variant}
+  data-scroll-target={scrollTarget}
+  id={`${id}-wrap`}
+>
+  <canvas id={`${id}-canvas`}></canvas>
+</div>
+
+<style>
+  .living-earth {
+    position: absolute;
+    inset: 0;
+    cursor: grab;
+  }
+  .living-earth:active { cursor: grabbing; }
+  .living-earth canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const MINT        = '94,234,212';
+  const MINT_BRIGHT  = '150,255,232';
+  const CITY_LIGHT   = '255,214,140';
+  const CLOUD_RGB    = '255,255,255';
+  const OCEAN_RGB    = '14,34,60';
+  const LAND_RGB     = '36,88,80';
+
+  const EGYPT_CITY_NAMES = [
+    'Cairo', 'Alexandria', 'Giza', 'Luxor', 'Aswan',
+    'Port Said', 'Suez', 'Mansoura', 'Tanta', 'Zagazig',
+    'Ismailia', 'Damietta', 'Sohag', 'Hurghada', 'Sharm El-Sheikh',
+    'Marsa Matruh', 'Borg El Arab', 'Minya', 'Beni Suef', 'Qena',
+    'Asyut', 'Fayoum', 'Kafr El-Sheikh', 'Gharbia', 'Beheira',
+    'Sharqia', 'Dakahlia', 'Monufia', 'Helwan', 'El-Mahalla',
+    '6th of October', 'Shubra El-Kheima', 'New Cairo', 'Ras Gharib',
+  ];
+
+  function hash(n: number): number {
+    const s = Math.sin(n * 12.9898) * 43758.5453;
+    return s - Math.floor(s);
+  }
+
+  /* Rough continent silhouettes via lat/lon bounding regions, edges jittered with hash noise */
+  function isLand(lat: number, lon: number): boolean {
+    const j  = (hash(lat * 7.13 + lon * 3.71) - 0.5) * 10;
+    const la = lat + j * 0.5;
+    const lo = lon + j;
+    if (la >  15 && la <  72 && lo > -168 && lo <  -52) return true; // N. America
+    if (la > -56 && la <  13 && lo >  -82 && lo <  -34) return true; // S. America
+    if (la >  36 && la <  71 && lo >  -10 && lo <   40) return true; // Europe
+    if (la > -35 && la <  37 && lo >  -18 && lo <   52) return true; // Africa
+    if (la >   5 && la <  77 && lo >   40 && lo <  180) return true; // Asia
+    if (la > -44 && la < -10 && lo >  112 && lo <  154) return true; // Australia
+    if (la < -66) return true;                                       // Antarctica
+    return false;
+  }
+
+  interface SurfaceDot { x: number; y: number; z: number; land: boolean; city: boolean; phase: number; }
+  interface CloudPuff  { x: number; y: number; z: number; r: number; a: number; }
+  interface RadarPing  { x: number; y: number; z: number; name: string; bornAt: number; }
+  type Vec3 = { x: number; y: number; z: number };
+
+  function initEarth(container: HTMLElement) {
+    const canvas = container.querySelector('canvas');
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+    const c2d = canvas.getContext('2d');
+    if (!c2d) return;
+    const ctx = c2d;
+
+    const isHero       = container.dataset.variant === 'hero';
+    const scrollTarget  = container.dataset.scrollTarget || '';
+
+    let W = 0, H = 0, cx = 0, cy = 0, R = 0;
+    let oceanGrad: CanvasGradient | null = null;
+    let atmosphereGrad: CanvasGradient | null = null;
+
+    function buildGradients() {
+      oceanGrad = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.1, cx, cy, R);
+      oceanGrad.addColorStop(0, `rgba(${OCEAN_RGB},0.9)`);
+      oceanGrad.addColorStop(1, 'rgba(6,14,26,0.95)');
+
+      atmosphereGrad = ctx.createRadialGradient(cx, cy, R * 0.97, cx, cy, R * 1.22);
+      atmosphereGrad.addColorStop(0, `rgba(${MINT},0)`);
+      atmosphereGrad.addColorStop(0.55, `rgba(${MINT},0.16)`);
+      atmosphereGrad.addColorStop(1, `rgba(${MINT},0)`);
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr  = Math.min(window.devicePixelRatio || 1, 1.5);
+      W = rect.width; H = rect.height;
+      canvas.width  = Math.max(1, W * dpr);
+      canvas.height = Math.max(1, H * dpr);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      cx = W / 2;
+      cy = H / 2;
+      R  = Math.min(W, H) * (isHero ? 0.40 : 0.42);
+      buildGradients();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    /* ── Rotation state ── */
+    let phi        = isHero ? -0.35 : -0.545;
+    let rotX       = 0.42;
+    let cloudDrift = 0;
+    let dragging = false, lastX = 0, lastY = 0, velX = 0;
+
+    function rotate(p: Vec3, aY: number, aX: number): Vec3 {
+      const x1 =  p.x * Math.cos(aY) + p.z * Math.sin(aY);
+      const z1 = -p.x * Math.sin(aY) + p.z * Math.cos(aY);
+      const y2 =  p.y * Math.cos(aX) - z1 * Math.sin(aX);
+      const z2 =  p.y * Math.sin(aX) + z1 * Math.cos(aX);
+      return { x: x1, y: y2, z: z2 };
+    }
+    function project(p: Vec3) {
+      return { x: cx + p.x * R, y: cy - p.y * R, vis: p.z };
+    }
+    function randomOnSphere(): Vec3 {
+      const u     = Math.random() * 2 - 1;
+      const theta = Math.random() * Math.PI * 2;
+      const r     = Math.sqrt(1 - u * u);
+      return { x: r * Math.cos(theta), y: u, z: r * Math.sin(theta) };
+    }
+
+    /* ── Static surface dots (ocean / land / city) ── */
+    const surface: SurfaceDot[] = [];
+    const total = isHero ? 2200 : 1600;
+    for (let i = 0; i < total; i++) {
+      const phi2   = Math.acos(1 - (2 * i) / total);
+      const theta2 = Math.PI * (1 + Math.sqrt(5)) * i;
+      const x = Math.sin(phi2) * Math.cos(theta2);
+      const y = Math.cos(phi2);
+      const z = Math.sin(phi2) * Math.sin(theta2);
+      const lat  = (Math.asin(y) * 180) / Math.PI;
+      const lon  = (Math.atan2(x, z) * 180) / Math.PI;
+      const land = isLand(lat, lon);
+      const city = land && hash(i * 31.7) > 0.965;
+      surface.push({ x, y, z, land, city, phase: hash(i * 91.3) * Math.PI * 2 });
+    }
+
+    /* ── Drifting cloud puffs ── */
+    const clouds: CloudPuff[] = [];
+    const cloudCount = isHero ? 45 : 28;
+    for (let i = 0; i < cloudCount; i++) {
+      const pos = randomOnSphere();
+      clouds.push({ ...pos, r: 10 + Math.random() * 22, a: 0.05 + Math.random() * 0.13 });
+    }
+
+    /* ── Radar pings labeled with Egyptian cities ── */
+    let pings: RadarPing[] = [];
+    let lastPing = 0;
+    const PING_MAX      = isHero ? 4 : 6;
+    const PING_INTERVAL = 700;
+    const PING_LIFETIME = 4200;
+    const PING_FADE     = 500;
+
+    function refreshPings(now: number) {
+      pings = pings.filter((p) => now - p.bornAt < PING_LIFETIME);
+      if (now - lastPing < PING_INTERVAL) return;
+      if (pings.length >= PING_MAX) return;
+      lastPing = now;
+
+      const used      = new Set(pings.map((p) => p.name));
+      const available  = EGYPT_CITY_NAMES.filter((n) => !used.has(n));
+      if (!available.length) return;
+
+      let attempts = 0;
+      while (attempts < 30) {
+        attempts++;
+        const pos = randomOnSphere();
+        const rp  = rotate(pos, phi, rotX);
+        if (rp.z < 0.25) continue;
+        const name = available[Math.floor(Math.random() * available.length)];
+        pings.push({ ...pos, name, bornAt: now });
+        break;
+      }
+    }
+
+    /* ── Starfield (hero only) ── */
+    interface Star { x: number; y: number; r: number; a: number; speed: number; phase: number; }
+    const stars: Star[] = [];
+    if (isHero) {
+      for (let i = 0; i < 110; i++) {
+        stars.push({
+          x: Math.random(), y: Math.random(),
+          r: Math.random() * 1.3 + 0.2,
+          a: Math.random() * 0.6 + 0.2,
+          speed: Math.random() * 0.0015 + 0.0004,
+          phase: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+    function drawStars(t: number) {
+      ctx.fillStyle = '#FFFFFF';
+      stars.forEach((s) => {
+        const tw = 0.5 + 0.5 * Math.sin(t * s.speed * 1000 + s.phase);
+        ctx.globalAlpha = s.a * (0.4 + 0.6 * tw);
+        ctx.beginPath();
+        ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function drawOceanBase() {
+      if (!oceanGrad) return;
+      ctx.fillStyle = oceanGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    /* Scratch buffers (x, y, radius, alpha per point) reused every frame — avoids
+       per-point allocation and lets each surface category draw with one fillStyle. */
+    const cityBuf  = new Float32Array(surface.length * 4);
+    const landBuf   = new Float32Array(surface.length * 4);
+    const oceanBuf  = new Float32Array(surface.length * 4);
+
+    function drawSurface(t: number) {
+      let nCity = 0, nLand = 0, nOcean = 0;
+      for (const d of surface) {
+        const rp = rotate(d, phi, rotX);
+        if (rp.z < -0.05) continue;
+        const p     = project(rp);
+        const alpha = 0.25 + rp.z * 0.7;
+        if (d.city) {
+          const flicker = 0.6 + 0.4 * Math.sin(t * 0.002 + d.phase);
+          const i = nCity++ * 4;
+          cityBuf[i] = p.x; cityBuf[i + 1] = p.y;
+          cityBuf[i + 2] = 1.3 + rp.z * 1.1; cityBuf[i + 3] = alpha * flicker;
+        } else if (d.land) {
+          const i = nLand++ * 4;
+          landBuf[i] = p.x; landBuf[i + 1] = p.y;
+          landBuf[i + 2] = 0.9 + rp.z * 0.9; landBuf[i + 3] = alpha;
+        } else {
+          const i = nOcean++ * 4;
+          oceanBuf[i] = p.x; oceanBuf[i + 1] = p.y;
+          oceanBuf[i + 2] = 0.7 + rp.z * 0.7; oceanBuf[i + 3] = alpha * 0.85;
+        }
+      }
+
+      ctx.fillStyle = `rgb(${OCEAN_RGB})`;
+      for (let i = 0; i < nOcean; i++) {
+        const o = i * 4;
+        ctx.globalAlpha = oceanBuf[o + 3];
+        ctx.beginPath();
+        ctx.arc(oceanBuf[o], oceanBuf[o + 1], oceanBuf[o + 2], 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = `rgb(${LAND_RGB})`;
+      for (let i = 0; i < nLand; i++) {
+        const o = i * 4;
+        ctx.globalAlpha = landBuf[o + 3];
+        ctx.beginPath();
+        ctx.arc(landBuf[o], landBuf[o + 1], landBuf[o + 2], 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = `rgb(${CITY_LIGHT})`;
+      for (let i = 0; i < nCity; i++) {
+        const o = i * 4;
+        ctx.globalAlpha = cityBuf[o + 3];
+        ctx.beginPath();
+        ctx.arc(cityBuf[o], cityBuf[o + 1], cityBuf[o + 2], 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    /* Cloud sprite baked once — avoids creating a radial gradient per cloud per frame */
+    const cloudSprite = document.createElement('canvas');
+    cloudSprite.width = cloudSprite.height = 64;
+    const cloudCtx = cloudSprite.getContext('2d')!;
+    const cloudSpriteGrad = cloudCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    cloudSpriteGrad.addColorStop(0, `rgba(${CLOUD_RGB},1)`);
+    cloudSpriteGrad.addColorStop(1, `rgba(${CLOUD_RGB},0)`);
+    cloudCtx.fillStyle = cloudSpriteGrad;
+    cloudCtx.beginPath();
+    cloudCtx.arc(32, 32, 32, 0, Math.PI * 2);
+    cloudCtx.fill();
+
+    function drawClouds() {
+      clouds.forEach((cl) => {
+        const rp = rotate(cl, phi + cloudDrift, rotX);
+        if (rp.z < 0.05) return;
+        const p     = project(rp);
+        const alpha = cl.a * (0.3 + rp.z * 0.8);
+        const rad   = cl.r * (0.6 + rp.z * 0.5);
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(cloudSprite, p.x - rad, p.y - rad, rad * 2, rad * 2);
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function drawAtmosphere() {
+      if (!atmosphereGrad) return;
+      ctx.fillStyle = atmosphereGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * 1.22, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawPings(now: number) {
+      refreshPings(now);
+      pings.forEach((sp) => {
+        const rp = rotate(sp, phi, rotX);
+        if (rp.z < 0.15) return;
+        const p   = project(rp);
+        const age = now - sp.bornAt;
+        const fadeIn  = Math.min(1, age / PING_FADE);
+        const fadeOut = age > PING_LIFETIME - PING_FADE
+          ? Math.max(0, (PING_LIFETIME - age) / PING_FADE)
+          : 1;
+        const alpha = Math.min(1, (rp.z - 0.15) / 0.3) * fadeIn * fadeOut;
+        if (alpha <= 0.01) return;
+
+        const ringT = (age % 1800) / 1800;
+        ctx.strokeStyle = `rgba(${MINT_BRIGHT},${(alpha * (1 - ringT) * 0.55).toFixed(3)})`;
+        ctx.lineWidth   = 1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4 + ringT * 16, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = `rgba(${MINT_BRIGHT},${(alpha * 0.95).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        const LY = -24;
+        ctx.save();
+        ctx.font = '600 9.5px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        const tw = ctx.measureText(sp.name).width;
+        const pw = tw + 14, ph = 16;
+        const px = p.x - pw / 2, py = p.y + LY - ph + 2;
+
+        ctx.globalAlpha = alpha * 0.85;
+        ctx.fillStyle   = 'rgba(6,16,20,0.85)';
+        ctx.strokeStyle = `rgba(${MINT},0.5)`;
+        ctx.lineWidth   = 0.8;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(px, py, pw, ph, 5);
+        else ctx.rect(px, py, pw, ph);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.globalAlpha = alpha * 0.45;
+        ctx.strokeStyle = `rgba(${MINT},0.6)`;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y - 3);
+        ctx.lineTo(p.x, py + ph);
+        ctx.stroke();
+
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle   = 'rgba(210,255,245,0.95)';
+        ctx.fillText(sp.name, p.x, py + ph - 4);
+        ctx.restore();
+      });
+    }
+
+    function draw() {
+      const t = Date.now();
+      ctx.clearRect(0, 0, W, H);
+      if (isHero) drawStars(t);
+
+      drawOceanBase();
+      drawSurface(t);
+      drawClouds();
+      drawAtmosphere();
+      drawPings(t);
+
+      if (!dragging) {
+        phi        += isHero ? 0.0009 : 0.0015;
+        cloudDrift += 0.00045;
+      }
+      if (!dragging && Math.abs(velX) > 0.0001) {
+        phi  += velX;
+        velX *= 0.92;
+      }
+      rafId = requestAnimationFrame(draw);
+    }
+
+    /* ── Pause rendering while off-screen — the dominant perf cost is this draw loop ── */
+    let rafId = 0;
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting && !rafId) {
+          rafId = requestAnimationFrame(draw);
+        } else if (!entry.isIntersecting && rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      }
+    }, { rootMargin: '200px' });
+    io.observe(container);
+
+    /* ── Pointer drag ── */
+    canvas.addEventListener('pointerdown', (e) => {
+      dragging = true; lastX = e.clientX; lastY = e.clientY; velX = 0;
+      canvas.setPointerCapture(e.pointerId);
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX, dy = e.clientY - lastY;
+      velX = dx * 0.005; phi += dx * 0.005;
+      rotX = Math.max(-1.2, Math.min(1.2, rotX + dy * 0.003));
+      lastX = e.clientX; lastY = e.clientY;
+    });
+    const endDrag = () => { dragging = false; };
+    canvas.addEventListener('pointerup',     endDrag);
+    canvas.addEventListener('pointercancel', endDrag);
+    canvas.addEventListener('touchmove', (e) => {
+      if (!dragging || !e.touches[0]) return;
+      const dx = e.touches[0].clientX - lastX, dy = e.touches[0].clientY - lastY;
+      phi  += dx * 0.005;
+      rotX  = Math.max(-1.2, Math.min(1.2, rotX + dy * 0.003));
+      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    }, { passive: true });
+
+    /* ── Scroll-tied sink & swing ── */
+    const triggerEl = scrollTarget ? document.querySelector(scrollTarget) : container.closest('section');
+    if (triggerEl) {
+      gsap.to(container, {
+        y: isHero ? 130 : 30,
+        rotate: isHero ? 7 : 3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: triggerEl,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-living-earth]').forEach(initEarth);
+</script>
