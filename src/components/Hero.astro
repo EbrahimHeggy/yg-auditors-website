@@ -1,4 +1,5 @@
 ---
+import { getEntry } from 'astro:content';
 import LivingEarth from './LivingEarth.astro';
 
 interface Props {
@@ -6,46 +7,9 @@ interface Props {
 }
 const { lang = 'en' } = Astro.props;
 
-const content = {
-  en: {
-    badge: 'Founded in 2015 · Cairo, Egypt',
-    phrases: [
-      'Professional Accounting & Auditing Services',
-      'Trusted by 100+ Businesses Across Egypt',
-      'ACCA-Certified Financial Experts',
-      'Your Partner in Compliance & Growth',
-    ],
-    subheadline: 'We are a professional group of accountants and auditors who provide our clients a full range of financial services.',
-    cta1: 'Our Services',
-    cta2: 'Download Profile',
-    stats: [
-      { value: '10+', label: 'Years of Experience',  count: 10,  before: '',  after: '+' },
-      { value: '100+', label: 'Clients Served',      count: 100, before: '',  after: '+' },
-      { value: '5',   label: 'Core Services',        count: 5,   before: '',  after: ''  },
-      { value: 'ACCA', label: 'Certified',           count: null, before: '', after: ''  },
-    ],
-  },
-  ar: {
-    badge: 'تأسس عام 2015 · القاهرة، مصر',
-    phrases: [
-      'خدمات محاسبة ومراجعة احترافية',
-      'موثوق به من أكثر من 100 شركة في مصر',
-      'خبراء ماليون معتمدون من ACCA',
-      'شريكك في الامتثال والنمو',
-    ],
-    subheadline: 'نحن مجموعة متخصصة من المحاسبين والمراجعين نقدم لعملائنا مجموعة متكاملة من الخدمات المالية.',
-    cta1: 'خدماتنا',
-    cta2: 'تحميل الملف التعريفي',
-    stats: [
-      { value: '+10',  label: 'سنوات من الخبرة',   count: 10,  before: '+', after: '' },
-      { value: '+100', label: 'عميل تم خدمته',     count: 100, before: '+', after: '' },
-      { value: '5',   label: 'خدمات أساسية',       count: 5,   before: '',  after: '' },
-      { value: 'ACCA', label: 'معتمد دولياً',      count: null, before: '', after: '' },
-    ],
-  },
-};
-
-const c = content[lang as keyof typeof content] ?? content.en;
+const en = await getEntry('hero', 'en');
+const ar = await getEntry('hero', 'ar');
+const c = (lang === 'ar' ? ar?.data : en?.data) ?? en!.data;
 const headline = c.phrases[0];
 ---
 
@@ -68,11 +32,12 @@ const headline = c.phrases[0];
       <p class="hero__sub" data-gsap="hero-sub">{c.subheadline}</p>
       <div class="hero__actions" data-gsap="hero-actions">
         <a href="#services" class="btn btn-mint">{c.cta1}</a>
-        <a href="/data/yg-auditors.pdf" class="btn btn-outline-mint" download>{c.cta2}</a>
-      </div>
+       
+      
       <div class="hero__badge-float" data-gsap="hero-float-badge">
         <span class="hero__badge-float-icon">✓</span>
         <span>ACCA Certified</span>
+      </div>
       </div>
     </div>
   </div>

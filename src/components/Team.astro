@@ -1,5 +1,5 @@
 ---
-import teamData from '../data/team.json';
+import { getCollection, getEntry } from 'astro:content';
 
 interface Props {
   lang?: string;
@@ -7,17 +7,13 @@ interface Props {
 const { lang = 'en' } = Astro.props;
 const l = lang as 'en' | 'ar';
 
-const headings = {
-  en: { badge: 'Leadership', title: 'Meet Our Founder', sub: 'A qualified ACCA professional dedicated to delivering exceptional financial services across Egypt since 2015.' },
-  ar: { badge: 'القيادة', title: 'تعرف على مؤسسنا', sub: 'محاسب قانوني مؤهل ACCA ملتزم بتقديم خدمات مالية استثنائية في جميع أنحاء مصر منذ عام 2015.' },
-};
-const h = headings[l] ?? headings.en;
+const headingsEn = await getEntry('teamSection', 'en');
+const headingsAr = await getEntry('teamSection', 'ar');
+const h = (l === 'ar' ? headingsAr?.data : headingsEn?.data) ?? headingsEn!.data;
+const lb = h.labels;
 
-const labels = {
-  en: { about: 'About', qualifications: 'Memberships', specializations: 'Specializations', viewCert: 'View Certificate', founded: 'Founded', experience: 'Years Experience', clients: 'Clients+', certified: 'Certified' },
-  ar: { about: 'نبذة', qualifications: 'العضويات المهنية', specializations: 'التخصصات', viewCert: 'عرض الشهادة', founded: 'سنة التأسيس', experience: 'سنوات خبرة', clients: 'عميل+', certified: 'معتمد دولياً' },
-};
-const lb = labels[l] ?? labels.en;
+const teamEntries = await getCollection('team');
+const team = teamEntries.map((entry) => entry.data);
 ---
 
 <section class="section team" id="team">
@@ -30,7 +26,7 @@ const lb = labels[l] ?? labels.en;
       <p>{h.sub}</p>
     </div>
 
-    {teamData.team.map((member) => (
+    {team.map((member) => (
       <div class="profile-chart" data-gsap="team-card">
 
         <!-- ── Top header strip ── -->
@@ -144,7 +140,7 @@ const lb = labels[l] ?? labels.en;
 </section>
 
 <!-- Certificate modal -->
-{teamData.team.filter(m => m.certificate).map((member) => (
+{team.filter(m => m.certificate).map((member) => (
   <dialog id="team-cert-modal" class="cert-modal">
     <button class="cert-modal__close" onclick="document.getElementById('team-cert-modal').close()" aria-label="Close">&times;</button>
     <img src={member.certificate} alt="ACCA Certificate" class="cert-modal__img" />
@@ -405,6 +401,8 @@ const lb = labels[l] ?? labels.en;
     max-height: 90vh;
     box-shadow: var(--shadow-xl);
     position: fixed;
+    inset: 0;
+    margin: auto;
   }
   .cert-modal::backdrop {
     background: rgba(0,0,0,0.65);

@@ -1,5 +1,5 @@
 ---
-import teamData from '../data/team.json';
+import { getCollection, getEntry } from 'astro:content';
 
 interface Props {
   lang?: string;
@@ -7,132 +7,12 @@ interface Props {
 const { lang = 'en' } = Astro.props;
 const l = lang as 'en' | 'ar';
 
-const certPath = teamData.team.find(m => m.certificate)?.certificate ?? '';
+const team = await getCollection('team');
+const certPath = team.find(m => m.data.certificate)?.data.certificate ?? '';
 
-const content = {
-  en: {
-    badge: 'Our Credentials',
-    title: 'Qualifications & Approvals',
-    sub: 'Youssef Galal holds internationally recognised qualifications and is officially approved by every major Egyptian financial regulatory authority.',
-    memberships: {
-      heading: 'Professional Memberships',
-      items: [
-        {
-          abbr: 'ACCA',
-          name: 'Association of Certified Chartered Accountants',
-          country: 'United Kingdom',
-          desc: 'The global body for professional accountants, with FCCA designation representing Fellow membership.',
-          color: '#6C3FA0',
-        },
-        {
-          abbr: 'ESAA',
-          name: 'Egyptian Society of Accountants and Auditors',
-          country: 'Egypt',
-          desc: 'The primary professional body for accountants and auditors in Egypt.',
-          color: '#3A86FF',
-        },
-        {
-          abbr: 'ETA',
-          name: 'Egyptian Tax Association',
-          country: 'Egypt',
-          desc: 'Specialist professional body for tax practitioners operating in the Egyptian market.',
-          color: '#F5A623',
-        },
-      ],
-    },
-    approvals: {
-      heading: 'Regulatory Approvals',
-      items: [
-        {
-          icon: '🏛️',
-          name: 'Ministry of Finance',
-          detail: 'General Registry of Accountants and Auditors — Joint-Stock Companies',
-          authority: 'Egyptian Government',
-        },
-        {
-          icon: '⚖️',
-          name: 'Syndicate of Commerce',
-          detail: 'Practicing Division of Accountants and Auditors',
-          authority: 'Egyptian Government',
-        },
-        {
-          icon: '📈',
-          name: 'GAFI',
-          detail: 'General Authority for Investment and Free-Zones — Auditor of SAE Companies',
-          authority: 'Egyptian Government',
-        },
-        {
-          icon: '🏦',
-          name: 'EFSA',
-          detail: 'Egyptian Financial Supervisory Authority — Auditor, Micro-finance Registry (c)',
-          authority: 'Egyptian Government',
-        },
-      ],
-    },
-  },
-  ar: {
-    badge: 'مؤهلاتنا',
-    title: 'المؤهلات والاعتمادات',
-    sub: 'يحمل يوسف جلال مؤهلات معترفاً بها دولياً، وهو معتمد رسمياً من قِبل جميع الجهات التنظيمية المالية المصرية الكبرى.',
-    memberships: {
-      heading: 'العضوية المهنية',
-      items: [
-        {
-          abbr: 'ACCA',
-          name: 'جمعية المحاسبين القانونيين المعتمدين',
-          country: 'المملكة المتحدة',
-          desc: 'الهيئة العالمية للمحاسبين المهنيين، مع درجة FCCA التي تمثل عضوية الزمالة.',
-          color: '#6C3FA0',
-        },
-        {
-          abbr: 'ESAA',
-          name: 'جمعية المحاسبين والمراجعين المصريين',
-          country: 'مصر',
-          desc: 'الهيئة المهنية الرئيسية للمحاسبين والمراجعين في مصر.',
-          color: '#3A86FF',
-        },
-        {
-          abbr: 'ETA',
-          name: 'جمعية الضرائب المصرية',
-          country: 'مصر',
-          desc: 'هيئة مهنية متخصصة لممارسي الضرائب العاملين في السوق المصرية.',
-          color: '#F5A623',
-        },
-      ],
-    },
-    approvals: {
-      heading: 'الموافقات التنظيمية',
-      items: [
-        {
-          icon: '🏛️',
-          name: 'وزارة المالية',
-          detail: 'السجل العام للمحاسبين والمراجعين — شركات مساهمة',
-          authority: 'الحكومة المصرية',
-        },
-        {
-          icon: '⚖️',
-          name: 'نقابة التجاريين',
-          detail: 'قسم ممارسة المحاسبين والمراجعين',
-          authority: 'الحكومة المصرية',
-        },
-        {
-          icon: '📈',
-          name: 'الهيئة العامة للاستثمار (GAFI)',
-          detail: 'مراجع شركات المساهمة المصرية (SAE)',
-          authority: 'الحكومة المصرية',
-        },
-        {
-          icon: '🏦',
-          name: 'الهيئة المصرية للرقابة المالية (EFSA)',
-          detail: 'مراجع — سجل التمويل متناهي الصغر (ج)',
-          authority: 'الحكومة المصرية',
-        },
-      ],
-    },
-  },
-};
-
-const c = content[l] ?? content.en;
+const en = await getEntry('qualifications', 'en');
+const ar = await getEntry('qualifications', 'ar');
+const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
 ---
 
 <section class="section quals" id="qualifications">
@@ -330,6 +210,8 @@ const c = content[l] ?? content.en;
     max-height: 90vh;
     box-shadow: var(--shadow-xl);
     position: fixed;
+    inset: 0;
+    margin: auto;
   }
   .quals-cert-modal::backdrop {
     background: rgba(0,0,0,0.65);

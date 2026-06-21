@@ -1,0 +1,32 @@
+{
+  "en": {
+    "badge": "Leadership",
+    "title": "Meet Our Founder",
+    "sub": "A qualified ACCA professional dedicated to delivering exceptional financial services across Egypt since 2015.",
+    "labels": {
+      "about": "About",
+      "qualifications": "Memberships",
+      "specializations": "Specializations",
+      "viewCert": "View Certificate",
+      "founded": "Founded",
+      "experience": "Years Experience",
+      "clients": "Clients+",
+      "certified": "Certified"
+    }
+  },
+  "ar": {
+    "badge": "القيادة",
+    "title": "تعرف على مؤسسنا",
+    "sub": "محاسب قانوني مؤهل ACCA ملتزم بتقديم خدمات مالية استثنائية في جميع أنحاء مصر منذ عام 2015.",
+    "labels": {
+      "about": "نبذة",
+      "qualifications": "العضويات المهنية",
+      "specializations": "التخصصات",
+      "viewCert": "عرض الشهادة",
+      "founded": "سنة التأسيس",
+      "experience": "سنوات خبرة",
+      "clients": "عميل+",
+      "certified": "معتمد دولياً"
+    }
+  }
+}

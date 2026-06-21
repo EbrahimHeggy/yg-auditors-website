@@ -1,0 +1,485 @@
+backend:
+  name: git-gateway
+  branch: master
+
+local_backend: true
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "sections"
+    label: "Page Sections"
+    files:
+      - name: "hero"
+        label: "Hero Section"
+        file: "src/content/sections/hero.json"
+        format: json
+        fields:
+          - label: "English"
+            name: "en"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Rotating Phrases", name: "phrases", widget: list }
+              - { label: "Subheadline", name: "subheadline", widget: text }
+              - { label: "Button 1 Label", name: "cta1", widget: string }
+              - { label: "Button 2 Label", name: "cta2", widget: string }
+              - label: "Stats"
+                name: "stats"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Value", name: "value", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Count (number to animate to, leave blank if none)", name: "count", widget: number, required: false }
+                  - { label: "Prefix", name: "before", widget: string, required: false }
+                  - { label: "Suffix", name: "after", widget: string, required: false }
+          - label: "Arabic"
+            name: "ar"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Rotating Phrases", name: "phrases", widget: list }
+              - { label: "Subheadline", name: "subheadline", widget: text }
+              - { label: "Button 1 Label", name: "cta1", widget: string }
+              - { label: "Button 2 Label", name: "cta2", widget: string }
+              - label: "Stats"
+                name: "stats"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Value", name: "value", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Count (number to animate to, leave blank if none)", name: "count", widget: number, required: false }
+                  - { label: "Prefix", name: "before", widget: string, required: false }
+                  - { label: "Suffix", name: "after", widget: string, required: false }
+
+      - name: "about"
+        label: "About Section"
+        file: "src/content/sections/about.json"
+        format: json
+        fields:
+          - label: "English"
+            name: "en"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Story", name: "story", widget: text }
+              - { label: "Detail", name: "detail", widget: text }
+              - { label: "Promise Quote", name: "promise", widget: text }
+              - label: "Highlights"
+                name: "highlights"
+                widget: list
+                summary: '{{fields.title}}'
+                fields:
+                  - { label: "Icon (emoji)", name: "icon", widget: string }
+                  - { label: "Title", name: "title", widget: string }
+                  - { label: "Description", name: "desc", widget: text }
+              - label: "Stats"
+                name: "stats"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Value", name: "value", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Count", name: "count", widget: number, required: false }
+                  - { label: "Prefix", name: "before", widget: string, required: false }
+                  - { label: "Suffix", name: "after", widget: string, required: false }
+          - label: "Arabic"
+            name: "ar"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Story", name: "story", widget: text }
+              - { label: "Detail", name: "detail", widget: text }
+              - { label: "Promise Quote", name: "promise", widget: text }
+              - label: "Highlights"
+                name: "highlights"
+                widget: list
+                summary: '{{fields.title}}'
+                fields:
+                  - { label: "Icon (emoji)", name: "icon", widget: string }
+                  - { label: "Title", name: "title", widget: string }
+                  - { label: "Description", name: "desc", widget: text }
+              - label: "Stats"
+                name: "stats"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Value", name: "value", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Count", name: "count", widget: number, required: false }
+                  - { label: "Prefix", name: "before", widget: string, required: false }
+                  - { label: "Suffix", name: "after", widget: string, required: false }
+
+      - name: "services"
+        label: "Services Section"
+        file: "src/content/sections/services.json"
+        format: json
+        fields:
+          - label: "English"
+            name: "en"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - { label: "Drag Hint", name: "hint", widget: string }
+              - label: "Services"
+                name: "services"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Number", name: "num", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Description", name: "desc", widget: text }
+              - label: "Stats"
+                name: "stats"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Number", name: "num", widget: string }
+                  - { label: "Suffix (+)", name: "plus", widget: string, required: false }
+                  - { label: "Label", name: "label", widget: string }
+          - label: "Arabic"
+            name: "ar"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - { label: "Drag Hint", name: "hint", widget: string }
+              - label: "Services"
+                name: "services"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Number", name: "num", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Description", name: "desc", widget: text }
+              - label: "Stats"
+                name: "stats"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Number", name: "num", widget: string }
+                  - { label: "Suffix (+)", name: "plus", widget: string, required: false }
+                  - { label: "Label", name: "label", widget: string }
+
+      - name: "qualifications"
+        label: "Qualifications Section"
+        file: "src/content/sections/qualifications.json"
+        format: json
+        fields:
+          - label: "English"
+            name: "en"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - label: "Professional Memberships"
+                name: "memberships"
+                widget: object
+                fields:
+                  - { label: "Heading", name: "heading", widget: string }
+                  - label: "Items"
+                    name: "items"
+                    widget: list
+                    summary: '{{fields.abbr}}'
+                    fields:
+                      - { label: "Abbreviation", name: "abbr", widget: string }
+                      - { label: "Full Name", name: "name", widget: string }
+                      - { label: "Country", name: "country", widget: string }
+                      - { label: "Description", name: "desc", widget: text }
+                      - { label: "Color (hex)", name: "color", widget: color }
+              - label: "Regulatory Approvals"
+                name: "approvals"
+                widget: object
+                fields:
+                  - { label: "Heading", name: "heading", widget: string }
+                  - label: "Items"
+                    name: "items"
+                    widget: list
+                    summary: '{{fields.name}}'
+                    fields:
+                      - { label: "Icon (emoji)", name: "icon", widget: string }
+                      - { label: "Name", name: "name", widget: string }
+                      - { label: "Detail", name: "detail", widget: text }
+                      - { label: "Authority", name: "authority", widget: string }
+          - label: "Arabic"
+            name: "ar"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - label: "Professional Memberships"
+                name: "memberships"
+                widget: object
+                fields:
+                  - { label: "Heading", name: "heading", widget: string }
+                  - label: "Items"
+                    name: "items"
+                    widget: list
+                    summary: '{{fields.abbr}}'
+                    fields:
+                      - { label: "Abbreviation", name: "abbr", widget: string }
+                      - { label: "Full Name", name: "name", widget: string }
+                      - { label: "Country", name: "country", widget: string }
+                      - { label: "Description", name: "desc", widget: text }
+                      - { label: "Color (hex)", name: "color", widget: color }
+              - label: "Regulatory Approvals"
+                name: "approvals"
+                widget: object
+                fields:
+                  - { label: "Heading", name: "heading", widget: string }
+                  - label: "Items"
+                    name: "items"
+                    widget: list
+                    summary: '{{fields.name}}'
+                    fields:
+                      - { label: "Icon (emoji)", name: "icon", widget: string }
+                      - { label: "Name", name: "name", widget: string }
+                      - { label: "Detail", name: "detail", widget: text }
+                      - { label: "Authority", name: "authority", widget: string }
+
+      - name: "consultant"
+        label: "Free Consultation Section"
+        file: "src/content/sections/consultant.json"
+        format: json
+        fields:
+          - label: "English"
+            name: "en"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - { label: "Name Field Placeholder", name: "namePlaceholder", widget: string }
+              - { label: "Email Field Placeholder", name: "emailPlaceholder", widget: string }
+              - { label: "Message Field Placeholder", name: "messagePlaceholder", widget: string }
+              - { label: "Submit Button Label", name: "submit", widget: string }
+              - label: "Contact Info Items"
+                name: "info"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Icon (emoji)", name: "icon", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Value", name: "value", widget: string }
+                  - { label: "Link (tel:/mailto:, leave blank if none)", name: "href", widget: string, required: false }
+          - label: "Arabic"
+            name: "ar"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - { label: "Name Field Placeholder", name: "namePlaceholder", widget: string }
+              - { label: "Email Field Placeholder", name: "emailPlaceholder", widget: string }
+              - { label: "Message Field Placeholder", name: "messagePlaceholder", widget: string }
+              - { label: "Submit Button Label", name: "submit", widget: string }
+              - label: "Contact Info Items"
+                name: "info"
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: "Icon (emoji)", name: "icon", widget: string }
+                  - { label: "Label", name: "label", widget: string }
+                  - { label: "Value", name: "value", widget: string }
+                  - { label: "Link (tel:/mailto:, leave blank if none)", name: "href", widget: string, required: false }
+
+      - name: "team-section"
+        label: "Team Section Text"
+        file: "src/content/sections/team-section.json"
+        format: json
+        fields:
+          - label: "English"
+            name: "en"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - label: "Labels"
+                name: "labels"
+                widget: object
+                fields:
+                  - { label: "About", name: "about", widget: string }
+                  - { label: "Memberships", name: "qualifications", widget: string }
+                  - { label: "Specializations", name: "specializations", widget: string }
+                  - { label: "View Certificate", name: "viewCert", widget: string }
+                  - { label: "Founded", name: "founded", widget: string }
+                  - { label: "Years Experience", name: "experience", widget: string }
+                  - { label: "Clients", name: "clients", widget: string }
+                  - { label: "Certified", name: "certified", widget: string }
+          - label: "Arabic"
+            name: "ar"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+              - label: "Labels"
+                name: "labels"
+                widget: object
+                fields:
+                  - { label: "About", name: "about", widget: string }
+                  - { label: "Memberships", name: "qualifications", widget: string }
+                  - { label: "Specializations", name: "specializations", widget: string }
+                  - { label: "View Certificate", name: "viewCert", widget: string }
+                  - { label: "Founded", name: "founded", widget: string }
+                  - { label: "Years Experience", name: "experience", widget: string }
+                  - { label: "Clients", name: "clients", widget: string }
+                  - { label: "Certified", name: "certified", widget: string }
+
+      - name: "contact-section"
+        label: "Contact Section Text"
+        file: "src/content/sections/contact-section.json"
+        format: json
+        fields:
+          - label: "English"
+            name: "en"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+          - label: "Arabic"
+            name: "ar"
+            widget: object
+            fields:
+              - { label: "Badge", name: "badge", widget: string }
+              - { label: "Title", name: "title", widget: string }
+              - { label: "Subtitle", name: "sub", widget: text }
+
+  - name: "team"
+    label: "Team Members"
+    folder: "src/content/team"
+    create: true
+    slug: "{{slug}}"
+    format: json
+    fields:
+      - { label: "Name (English)", name: "name", widget: string }
+      - { label: "Name (Arabic)", name: "arabicName", widget: string }
+      - { label: "Credentials (e.g. ACCA)", name: "credentials", widget: string }
+      - { label: "Full Title", name: "fullTitle", widget: string }
+      - label: "Role / Job Title"
+        name: "role"
+        widget: object
+        fields:
+          - { label: "English", name: "en", widget: string }
+          - { label: "Arabic", name: "ar", widget: string }
+      - { label: "Designation", name: "designation", widget: string }
+      - { label: "Photo", name: "photo", widget: image }
+      - label: "Bio"
+        name: "bio"
+        widget: object
+        fields:
+          - { label: "English", name: "en", widget: text }
+          - { label: "Arabic", name: "ar", widget: text }
+      - { label: "Certificate Image", name: "certificate", widget: file, required: false }
+      - { label: "Qualifications", name: "qualifications", widget: list }
+      - { label: "Specializations", name: "specializations", widget: list }
+      - label: "Social Links"
+        name: "social"
+        widget: object
+        fields:
+          - { label: "Facebook URL", name: "facebook", widget: string, required: false }
+          - { label: "LinkedIn URL", name: "linkedin", widget: string, required: false }
+
+  - name: "contact-info"
+    label: "Contact Information"
+    files:
+      - name: "info"
+        label: "Contact Details"
+        file: "src/content/contact-info.json"
+        format: json
+        fields:
+          - label: "Contact"
+            name: "contact"
+            widget: object
+            fields:
+              - label: "Address"
+                name: "address"
+                widget: object
+                fields:
+                  - { label: "Address (English)", name: "en", widget: string }
+                  - { label: "Address (Arabic)", name: "ar", widget: string }
+                  - { label: "Area", name: "area", widget: string }
+                  - { label: "City", name: "city", widget: string }
+                  - { label: "Country", name: "country", widget: string }
+              - label: "Phone Numbers"
+                name: "phones"
+                widget: list
+                summary: '{{fields.display}}'
+                fields:
+                  - { label: "Number (for tel: links)", name: "number", widget: string }
+                  - { label: "Display Format", name: "display", widget: string }
+                  - { label: "Type", name: "type", widget: string }
+              - { label: "Email", name: "email", widget: string }
+              - label: "Working Hours"
+                name: "workingHours"
+                widget: object
+                fields:
+                  - label: "Days"
+                    name: "days"
+                    widget: object
+                    fields:
+                      - { label: "English", name: "en", widget: string }
+                      - { label: "Arabic", name: "ar", widget: string }
+                  - { label: "Hours", name: "hours", widget: string }
+                  - { label: "Timezone", name: "timezone", widget: string }
+              - label: "Social"
+                name: "social"
+                widget: object
+                fields:
+                  - label: "Facebook"
+                    name: "facebook"
+                    widget: object
+                    fields:
+                      - { label: "URL", name: "url", widget: string }
+                      - { label: "Label", name: "label", widget: string }
+                  - label: "LinkedIn"
+                    name: "linkedin"
+                    widget: object
+                    fields:
+                      - { label: "URL", name: "url", widget: string }
+                      - { label: "Label", name: "label", widget: string }
+              - label: "Consultant Form Text"
+                name: "consultant"
+                widget: object
+                fields:
+                  - label: "Heading"
+                    name: "heading"
+                    widget: object
+                    fields:
+                      - { label: "English", name: "en", widget: string }
+                      - { label: "Arabic", name: "ar", widget: string }
+                  - label: "Subheading"
+                    name: "subheading"
+                    widget: object
+                    fields:
+                      - { label: "English", name: "en", widget: string }
+                      - { label: "Arabic", name: "ar", widget: string }
+                  - label: "Form Fields"
+                    name: "formFields"
+                    widget: list
+                    summary: '{{fields.label}}'
+                    fields:
+                      - { label: "Name", name: "name", widget: string }
+                      - { label: "Label", name: "label", widget: string }
+                      - { label: "Type", name: "type", widget: string }
+                      - { label: "Required", name: "required", widget: boolean }
+          - label: "External Links"
+            name: "externalLinks"
+            widget: list
+            summary: '{{fields.name}}'
+            fields:
+              - { label: "Name", name: "name", widget: string }
+              - { label: "URL", name: "url", widget: string }
+              - { label: "Description", name: "description", widget: text }

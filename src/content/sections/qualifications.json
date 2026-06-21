@@ -1,0 +1,46 @@
+{
+  "en": {
+    "badge": "Our Credentials",
+    "title": "Qualifications & Approvals",
+    "sub": "Youssef Galal holds internationally recognised qualifications and is officially approved by every major Egyptian financial regulatory authority.",
+    "memberships": {
+      "heading": "Professional Memberships",
+      "items": [
+        { "abbr": "ACCA", "name": "Association of Certified Chartered Accountants", "country": "United Kingdom", "desc": "The global body for professional accountants, with FCCA designation representing Fellow membership.", "color": "#6C3FA0" },
+        { "abbr": "ESAA", "name": "Egyptian Society of Accountants and Auditors", "country": "Egypt", "desc": "The primary professional body for accountants and auditors in Egypt.", "color": "#3A86FF" },
+        { "abbr": "ETA", "name": "Egyptian Tax Association", "country": "Egypt", "desc": "Specialist professional body for tax practitioners operating in the Egyptian market.", "color": "#F5A623" }
+      ]
+    },
+    "approvals": {
+      "heading": "Regulatory Approvals",
+      "items": [
+        { "icon": "🏛️", "name": "Ministry of Finance", "detail": "General Registry of Accountants and Auditors — Joint-Stock Companies", "authority": "Egyptian Government" },
+        { "icon": "⚖️", "name": "Syndicate of Commerce", "detail": "Practicing Division of Accountants and Auditors", "authority": "Egyptian Government" },
+        { "icon": "📈", "name": "GAFI", "detail": "General Authority for Investment and Free-Zones — Auditor of SAE Companies", "authority": "Egyptian Government" },
+        { "icon": "🏦", "name": "EFSA", "detail": "Egyptian Financial Supervisory Authority — Auditor, Micro-finance Registry (c)", "authority": "Egyptian Government" }
+      ]
+    }
+  },
+  "ar": {
+    "badge": "مؤهلاتنا",
+    "title": "المؤهلات والاعتمادات",
+    "sub": "يحمل يوسف جلال مؤهلات معترفاً بها دولياً، وهو معتمد رسمياً من قِبل جميع الجهات التنظيمية المالية المصرية الكبرى.",
+    "memberships": {
+      "heading": "العضوية المهنية",
+      "items": [
+        { "abbr": "ACCA", "name": "جمعية المحاسبين القانونيين المعتمدين", "country": "المملكة المتحدة", "desc": "الهيئة العالمية للمحاسبين المهنيين، مع درجة FCCA التي تمثل عضوية الزمالة.", "color": "#6C3FA0" },
+        { "abbr": "ESAA", "name": "جمعية المحاسبين والمراجعين المصريين", "country": "مصر", "desc": "الهيئة المهنية الرئيسية للمحاسبين والمراجعين في مصر.", "color": "#3A86FF" },
+        { "abbr": "ETA", "name": "جمعية الضرائب المصرية", "country": "مصر", "desc": "هيئة مهنية متخصصة لممارسي الضرائب العاملين في السوق المصرية.", "color": "#F5A623" }
+      ]
+    },
+    "approvals": {
+      "heading": "الموافقات التنظيمية",
+      "items": [
+        { "icon": "🏛️", "name": "وزارة المالية", "detail": "السجل العام للمحاسبين والمراجعين — شركات مساهمة", "authority": "الحكومة المصرية" },
+        { "icon": "⚖️", "name": "نقابة التجاريين", "detail": "قسم ممارسة المحاسبين والمراجعين", "authority": "الحكومة المصرية" },
+        { "icon": "📈", "name": "الهيئة العامة للاستثمار (GAFI)", "detail": "مراجع شركات المساهمة المصرية (SAE)", "authority": "الحكومة المصرية" },
+        { "icon": "🏦", "name": "الهيئة المصرية للرقابة المالية (EFSA)", "detail": "مراجع — سجل التمويل متناهي الصغر (ج)", "authority": "الحكومة المصرية" }
+      ]
+    }
+  }
+}

@@ -1,50 +1,15 @@
 ---
+import { getEntry } from 'astro:content';
+
 interface Props {
   lang?: string;
 }
 const { lang = 'en' } = Astro.props;
 const l = lang as 'en' | 'ar';
 
-const content = {
-  en: {
-    badge: 'Who We Are',
-    title: 'About YG-Auditors',
-    story: 'Youssef Galal, FCCA — Public Accountant and Consultancy was founded in 2015 with a single commitment: to provide the highest quality financial services to every client we serve.',
-    detail: 'Our office is located in New Maadi, Cairo, Egypt. We serve a wide variety of clients across Egypt — from large corporations to small businesses, non-profit organizations, and individual professionals.',
-    promise: 'We make sure that every client is served by the expertise of our whole firm — combining deep regulatory knowledge, international standards, and local market understanding.',
-    highlights: [
-      { icon: '🏆', title: 'ACCA Certified', desc: 'International professional standard from the UK\'s leading accountancy body' },
-      { icon: '🏛️', title: 'Ministry Approved', desc: 'Officially registered in the Egyptian Ministry of Finance general registry' },
-      { icon: '📍', title: 'Based in Maadi', desc: 'Conveniently located in New Maadi, Cairo with Egypt-wide client service' },
-    ],
-    stats: [
-      { value: '2015', label: 'Year Founded',   count: 2015, before: '',  after: ''  },
-      { value: '10+',  label: 'Years Active',   count: 10,   before: '',  after: '+' },
-      { value: '100+', label: 'Clients Served', count: 100,  before: '',  after: '+' },
-      { value: '5',    label: 'Core Services',  count: 5,    before: '',  after: ''  },
-    ],
-  },
-  ar: {
-    badge: 'من نحن',
-    title: 'عن مكتبنا',
-    story: 'تأسس مكتب يوسف جلال للمحاسبة القانونية والاستشارات عام 2015 بالتزام واحد: تقديم أعلى مستويات الخدمات المالية لكل عميل نخدمه.',
-    detail: 'مكتبنا يقع في منطقة المعادي الجديدة، القاهرة، مصر. نخدم مجموعة واسعة من العملاء في جميع أنحاء مصر — من الشركات الكبرى إلى الشركات الصغيرة والمنظمات غير الربحية والمهنيين الأفراد.',
-    promise: 'نحرص على خدمة كل عميل بخبرة مكتبنا بأكمله — من خلال الجمع بين المعرفة التنظيمية العميقة والمعايير الدولية وفهم السوق المحلي.',
-    highlights: [
-      { icon: '🏆', title: 'شهادة ACCA', desc: 'معيار مهني دولي من الهيئة المحاسبية الرائدة في المملكة المتحدة' },
-      { icon: '🏛️', title: 'موافقة وزارية', desc: 'مسجل رسمياً في السجل العام لوزارة المالية المصرية' },
-      { icon: '📍', title: 'في المعادي', desc: 'موقع مريح في المعادي الجديدة، القاهرة، مع خدمة عملاء في جميع أنحاء مصر' },
-    ],
-    stats: [
-      { value: '2015', label: 'سنة التأسيس',     count: 2015, before: '',  after: '' },
-      { value: '+10',  label: 'سنوات نشاط',      count: 10,   before: '+', after: '' },
-      { value: '+100', label: 'عميل تم خدمته',   count: 100,  before: '+', after: '' },
-      { value: '5',    label: 'خدمات أساسية',    count: 5,    before: '',  after: '' },
-    ],
-  },
-};
-
-const c = content[l] ?? content.en;
+const en = await getEntry('about', 'en');
+const ar = await getEntry('about', 'ar');
+const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
 ---
 
 <section class="section about" id="about">

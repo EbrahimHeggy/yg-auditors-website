@@ -1,0 +1,28 @@
+{
+  "name": "Youssef Galal",
+  "arabicName": "يوسف جلال",
+  "credentials": "ACCA",
+  "fullTitle": "Youssef Galal, ACCA",
+  "role": {
+    "en": "Founder & Principal Accountant",
+    "ar": "المؤسس والمحاسب القانوني"
+  },
+  "designation": "Public Accountant and Consultant",
+  "photo": "/images/intro-img1.png",
+  "bio": {
+    "en": "Youssef Galal is a qualified Chartered Certified Accountant (ACCA) and the founder of YG-Auditors. Since establishing the firm in 2015, he has led a professional team dedicated to delivering comprehensive financial services to clients across Egypt.",
+    "ar": "يوسف جلال محاسب قانوني مؤهل (ACCA) ومؤسس مكتب YG للمحاسبة والمراجعة. منذ تأسيس المكتب عام 2015، يقود فريقاً متخصصاً يقدم خدمات مالية شاملة للعملاء في مختلف أنحاء مصر."
+  },
+  "certificate": "/certificate-acca.png",
+  "qualifications": ["ACCA – Association of Chartered Certified Accountants"],
+  "specializations": [
+    "Audit & Assurance",
+    "Tax Advisory",
+    "Business Consulting",
+    "Financial Reporting"
+  ],
+  "social": {
+    "facebook": "https://www.facebook.com/Youssef-Galal-ACCA-512331115638403/",
+    "linkedin": "https://www.linkedin.com/in/youssef-galal-acca/"
+  }
+}

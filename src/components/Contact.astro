@@ -1,5 +1,5 @@
 ---
-import contactData from '../data/contact.json';
+import { getEntry } from 'astro:content';
 
 interface Props {
   lang?: string;
@@ -7,13 +7,12 @@ interface Props {
 const { lang = 'en' } = Astro.props;
 const l = lang as 'en' | 'ar';
 
-const headings = {
-  en: { badge: 'Get In Touch', title: 'Contact Us', sub: 'We are here to help. Reach out to us through any of the channels below.' },
-  ar: { badge: 'تواصل معنا', title: 'اتصل بنا', sub: 'نحن هنا للمساعدة. تواصل معنا من خلال أي من القنوات أدناه.' },
-};
-const h = headings[l] ?? headings.en;
+const headingsEn = await getEntry('contactSection', 'en');
+const headingsAr = await getEntry('contactSection', 'ar');
+const h = (l === 'ar' ? headingsAr?.data : headingsEn?.data) ?? headingsEn!.data;
 
-const { contact } = contactData;
+const contactInfoEntry = await getEntry('contactInfo', 'info');
+const { contact, externalLinks } = contactInfoEntry!.data;
 const address = contact.address[l] ?? contact.address.en;
 const days = contact.workingHours.days[l] ?? contact.workingHours.days.en;
 ---
@@ -98,7 +97,7 @@ const days = contact.workingHours.days[l] ?? contact.workingHours.days.en;
         <div class="contact__external-links">
           <h4>{l === 'ar' ? 'روابط مفيدة' : 'Useful Links'}</h4>
           <div class="ext-links">
-            {contactData.externalLinks.map((link) => (
+            {externalLinks.map((link) => (
               <a href={link.url} target="_blank" rel="noopener" class="ext-link">
                 <span class="ext-link__arrow">↗</span>
                 <div>

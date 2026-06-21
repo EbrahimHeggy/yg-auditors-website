@@ -1,0 +1,32 @@
+{
+  "en": {
+    "badge": "Free Consultation",
+    "title": "Get Expert Financial Advice",
+    "sub": "With No Obligation — Tell us about your needs and one of our professionals will get back to you.",
+    "namePlaceholder": "Your Full Name",
+    "emailPlaceholder": "Email Address",
+    "messagePlaceholder": "Describe your financial needs or question...",
+    "submit": "Send Message",
+    "info": [
+      { "icon": "📞", "label": "Phone", "value": "+20 2 2517 9678", "href": "tel:+20225179678" },
+      { "icon": "📱", "label": "Mobile", "value": "+20 100 480 9543", "href": "tel:+201004809543" },
+      { "icon": "📧", "label": "Email", "value": "Ygalal@yg-auditors.com", "href": "mailto:Ygalal@yg-auditors.com" },
+      { "icon": "🕐", "label": "Hours", "value": "Sun–Thu, 9AM–5PM", "href": null }
+    ]
+  },
+  "ar": {
+    "badge": "استشارة مجانية",
+    "title": "احصل على استشارة مالية متخصصة",
+    "sub": "بدون أي التزام — أخبرنا باحتياجاتك وسيتواصل معك أحد متخصصينا في أقرب وقت.",
+    "namePlaceholder": "الاسم الكامل",
+    "emailPlaceholder": "البريد الإلكتروني",
+    "messagePlaceholder": "اشرح احتياجاتك المالية أو سؤالك...",
+    "submit": "إرسال الرسالة",
+    "info": [
+      { "icon": "📞", "label": "هاتف", "value": "+20 2 2517 9678", "href": "tel:+20225179678" },
+      { "icon": "📱", "label": "جوال", "value": "+20 100 480 9543", "href": "tel:+201004809543" },
+      { "icon": "📧", "label": "بريد إلكتروني", "value": "Ygalal@yg-auditors.com", "href": "mailto:Ygalal@yg-auditors.com" },
+      { "icon": "🕐", "label": "مواعيد العمل", "value": "الأحد–الخميس، 9 ص–5 م", "href": null }
+    ]
+  }
+}

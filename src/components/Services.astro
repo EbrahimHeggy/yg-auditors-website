@@ -1,4 +1,5 @@
 ---
+import { getEntry } from 'astro:content';
 import LivingEarth from './LivingEarth.astro';
 
 interface Props {
@@ -7,88 +8,9 @@ interface Props {
 const { lang = 'en' } = Astro.props;
 const l = lang as 'en' | 'ar';
 
-const content = {
-  en: {
-    badge: 'What We Offer',
-    title: 'Our Services',
-    sub: 'Delivered across 15+ cities in Egypt with international reach through the PA Global network.',
-    hint: 'Drag to rotate',
-    services: [
-      {
-        num: '01',
-        label: 'Audit & Assurance',
-        desc: 'Independent examination of financial statements ensuring accuracy, regulatory compliance, and stakeholder confidence.',
-      },
-      {
-        num: '02',
-        label: 'Tax Advisory',
-        desc: 'Strategic tax planning, filing, and compliance services tailored to Egyptian tax law and international standards.',
-      },
-      {
-        num: '03',
-        label: 'Accounting Outsourcing',
-        desc: 'Full-cycle bookkeeping, payroll processing, and financial reporting so you can focus on growing your business.',
-      },
-      {
-        num: '04',
-        label: 'Social Insurance',
-        desc: 'Registration, calculation, and compliance management for employee social insurance obligations.',
-      },
-      {
-        num: '05',
-        label: 'Business Setup',
-        desc: 'End-to-end company formation, licensing, and regulatory registration across Egypt.',
-      },
-    ],
-    stats: [
-      { num: '10',   plus: '+', label: 'Years Active' },
-      { num: '100',  plus: '+', label: 'Clients Served' },
-      { num: '15',   plus: '+', label: 'Cities Covered' },
-      { num: 'ACCA', plus: '',  label: 'Certified' },
-    ],
-  },
-  ar: {
-    badge: 'ما نقدمه',
-    title: 'خدماتنا',
-    sub: 'نخدم أكثر من 15 مدينة في مصر مع امتداد دولي عبر شبكة PA Global.',
-    hint: 'اسحب للتدوير',
-    services: [
-      {
-        num: '01',
-        label: 'تدقيق وتأكيد',
-        desc: 'فحص مستقل للقوائم المالية لضمان الدقة والامتثال التنظيمي وثقة أصحاب المصلحة.',
-      },
-      {
-        num: '02',
-        label: 'استشارات ضريبية',
-        desc: 'تخطيط ضريبي استراتيجي وتقديم الإقرارات والامتثال وفقاً للقانون الضريبي المصري والمعايير الدولية.',
-      },
-      {
-        num: '03',
-        label: 'مسك الدفاتر',
-        desc: 'خدمات محاسبية متكاملة وكشوف رواتب وتقارير مالية حتى تتفرغ لتنمية أعمالك.',
-      },
-      {
-        num: '04',
-        label: 'تأمينات اجتماعية',
-        desc: 'تسجيل وحساب وإدارة الامتثال لالتزامات التأمينات الاجتماعية للموظفين.',
-      },
-      {
-        num: '05',
-        label: 'تأسيس الأعمال',
-        desc: 'تأسيس الشركات والتراخيص والتسجيل التنظيمي من الألف إلى الياء في جميع أنحاء مصر.',
-      },
-    ],
-    stats: [
-      { num: '10',   plus: '+', label: 'سنوات نشاط' },
-      { num: '100',  plus: '+', label: 'عميل تم خدمته' },
-      { num: '15',   plus: '+', label: 'مدينة مغطاة' },
-      { num: 'ACCA', plus: '',  label: 'معتمد دولياً' },
-    ],
-  },
-};
-
-const c = content[l] ?? content.en;
+const en = await getEntry('services', 'en');
+const ar = await getEntry('services', 'ar');
+const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
 ---
 
 <section class="section services-section" id="services">
