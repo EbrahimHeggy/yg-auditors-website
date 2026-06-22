@@ -457,27 +457,31 @@ const team = teamEntries.map((entry) => entry.data);
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  ScrollTrigger.create({
-    trigger: '#team',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="team-header"]',
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
-      );
-      gsap.fromTo('[data-gsap="team-card"]',
-        { autoAlpha: 0, y: 60 },
-        { autoAlpha: 1, y: 0, duration: 0.85, ease: 'power3.out', delay: 0.2 }
-      );
-      gsap.fromTo('.profile-chart__spec-card',
-        { autoAlpha: 0, scale: 0.9 },
-        { autoAlpha: 1, scale: 1, duration: 0.4, stagger: 0.08, ease: 'back.out(1.3)', delay: 0.6 }
-      );
-    },
+  lazyInitSection('#team', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    ScrollTrigger.create({
+      trigger: '#team',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="team-header"]',
+          { autoAlpha: 0, y: 40 },
+          { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+        );
+        gsap.fromTo('[data-gsap="team-card"]',
+          { autoAlpha: 0, y: 60 },
+          { autoAlpha: 1, y: 0, duration: 0.85, ease: 'power3.out', delay: 0.2 }
+        );
+        gsap.fromTo('.profile-chart__spec-card',
+          { autoAlpha: 0, scale: 0.9 },
+          { autoAlpha: 1, scale: 1, duration: 0.4, stagger: 0.08, ease: 'back.out(1.3)', delay: 0.6 }
+        );
+      },
+    });
   });
 </script>

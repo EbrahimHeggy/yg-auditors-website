@@ -52,6 +52,7 @@ const headline = c.phrases[0];
               data-count={stat.count !== null ? String(stat.count) : undefined}
               data-before={stat.before || undefined}
               data-after={stat.after || undefined}
+              style={`min-width:${stat.value.length}ch`}
             >{stat.value}</span>
             <span class="hero__stat-label">{stat.label}</span>
           </div>
@@ -249,10 +250,13 @@ const headline = c.phrases[0];
   }
   .hero__stat:last-child { border-right: none; }
   .hero__stat-value {
+    display: inline-block;
     font-family: var(--font-serif);
     font-size: 2rem;
     font-weight: 700;
     line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
     background: linear-gradient(135deg, #FFFFFF 0%, #5EEAD4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -348,7 +352,8 @@ const headline = c.phrases[0];
 
   /* ── GSAP entrance ── */
   gsap.set('[data-gsap="hero-badge"]',       { autoAlpha: 0, y: 24 });
-  gsap.set('[data-gsap="hero-headline"]',    { autoAlpha: 0, y: 32 });
+  /* Headline is the LCP element — kept visible (no autoAlpha) so it paints immediately instead of waiting on this script; it still slides up. */
+  gsap.set('[data-gsap="hero-headline"]',    { y: 32 });
   gsap.set('[data-gsap="hero-sub"]',         { autoAlpha: 0, y: 24 });
   gsap.set('[data-gsap="hero-actions"]',     { autoAlpha: 0, y: 20 });
   gsap.set('[data-gsap="hero-float-badge"]', { autoAlpha: 0, scale: 0.8 });
@@ -357,7 +362,7 @@ const headline = c.phrases[0];
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.1 });
 
   tl.to('[data-gsap="hero-badge"]',       { autoAlpha: 1, y: 0, duration: 0.55 })
-    .to('[data-gsap="hero-headline"]',    { autoAlpha: 1, y: 0, duration: 0.7  }, '-=0.3')
+    .to('[data-gsap="hero-headline"]',    { y: 0, duration: 0.7  }, '-=0.3')
     .to('[data-gsap="hero-sub"]',         { autoAlpha: 1, y: 0, duration: 0.55 }, '-=0.35')
     .to('[data-gsap="hero-actions"]',     { autoAlpha: 1, y: 0, duration: 0.5  }, '-=0.25')
     .to('[data-gsap="hero-float-badge"]', { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'back.out(1.4)' }, '-=0.2')

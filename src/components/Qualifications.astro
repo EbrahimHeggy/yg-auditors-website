@@ -307,43 +307,47 @@ const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  ScrollTrigger.create({
-    trigger: '#qualifications',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="quals-header"]',
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
-      );
-    },
-  });
+  lazyInitSection('#qualifications', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
 
-  ScrollTrigger.create({
-    trigger: '[data-gsap="quals-memberships"]',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="quals-memberships"] .quals__member-card',
-        { autoAlpha: 0, y: 50 },
-        { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out' }
-      );
-    },
-  });
+    ScrollTrigger.create({
+      trigger: '#qualifications',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="quals-header"]',
+          { autoAlpha: 0, y: 40 },
+          { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+        );
+      },
+    });
 
-  ScrollTrigger.create({
-    trigger: '[data-gsap="quals-approvals"]',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="quals-approvals"] .quals__approval-card',
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.12, ease: 'power3.out' }
-      );
-    },
+    ScrollTrigger.create({
+      trigger: '[data-gsap="quals-memberships"]',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="quals-memberships"] .quals__member-card',
+          { autoAlpha: 0, y: 50 },
+          { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out' }
+        );
+      },
+    });
+
+    ScrollTrigger.create({
+      trigger: '[data-gsap="quals-approvals"]',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="quals-approvals"] .quals__approval-card',
+          { autoAlpha: 0, y: 40 },
+          { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.12, ease: 'power3.out' }
+        );
+      },
+    });
   });
 </script>

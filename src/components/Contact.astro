@@ -272,27 +272,31 @@ const days = contact.workingHours.days[l] ?? contact.workingHours.days.en;
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  ScrollTrigger.create({
-    trigger: '#contact',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="contact-header"]',
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
-      );
-      gsap.fromTo('[data-gsap="contact-info"] .contact-item',
-        { autoAlpha: 0, x: -40 },
-        { autoAlpha: 1, x: 0, duration: 0.5, stagger: 0.12, ease: 'power3.out', delay: 0.2 }
-      );
-      gsap.fromTo('[data-gsap="contact-map"]',
-        { autoAlpha: 0, x: 40 },
-        { autoAlpha: 1, x: 0, duration: 0.75, ease: 'power3.out', delay: 0.1 }
-      );
-    },
+  lazyInitSection('#contact', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    ScrollTrigger.create({
+      trigger: '#contact',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="contact-header"]',
+          { autoAlpha: 0, y: 40 },
+          { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+        );
+        gsap.fromTo('[data-gsap="contact-info"] .contact-item',
+          { autoAlpha: 0, x: -40 },
+          { autoAlpha: 1, x: 0, duration: 0.5, stagger: 0.12, ease: 'power3.out', delay: 0.2 }
+        );
+        gsap.fromTo('[data-gsap="contact-map"]',
+          { autoAlpha: 0, x: 40 },
+          { autoAlpha: 1, x: 0, duration: 0.75, ease: 'power3.out', delay: 0.1 }
+        );
+      },
+    });
   });
 </script>

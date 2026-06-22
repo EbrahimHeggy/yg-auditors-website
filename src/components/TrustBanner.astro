@@ -254,23 +254,27 @@ const c = content[l] ?? content.en;
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  ScrollTrigger.create({
-    trigger: '#trust',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="trust-left"]',
-        { autoAlpha: 0, x: -50 },
-        { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
-      );
-      gsap.fromTo('[data-gsap="trust-right"]',
-        { autoAlpha: 0, x: 50, scale: 0.96 },
-        { autoAlpha: 1, x: 0, scale: 1, duration: 0.85, ease: 'power3.out', delay: 0.15 }
-      );
-    },
+  lazyInitSection('#trust', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    ScrollTrigger.create({
+      trigger: '#trust',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="trust-left"]',
+          { autoAlpha: 0, x: -50 },
+          { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
+        );
+        gsap.fromTo('[data-gsap="trust-right"]',
+          { autoAlpha: 0, x: 50, scale: 0.96 },
+          { autoAlpha: 1, x: 0, scale: 1, duration: 0.85, ease: 'power3.out', delay: 0.15 }
+        );
+      },
+    });
   });
 </script>

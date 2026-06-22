@@ -75,33 +75,37 @@ const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
 </section>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  /* ── GSAP scroll entrance ── */
-  ScrollTrigger.create({
-    trigger: '#services',
-    start: 'top 80%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="services-header"]',
-        { autoAlpha: 0, x: -40 },
-        { autoAlpha: 1, x: 0, duration: 0.7, ease: 'power3.out' }
-      );
-      gsap.fromTo('[data-gsap="svc-item"]',
-        { autoAlpha: 0, x: -28 },
-        { autoAlpha: 1, x: 0, duration: 0.5, stagger: 0.09, ease: 'power3.out', delay: 0.2 }
-      );
-      gsap.fromTo('[data-gsap="services-stats"] .svc-stat',
-        { autoAlpha: 0, y: 18 },
-        { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.09, ease: 'power3.out', delay: 0.55 }
-      );
-      gsap.fromTo('[data-gsap="services-globe"]',
-        { autoAlpha: 0, scale: 0.92 },
-        { autoAlpha: 1, scale: 1, duration: 0.9, ease: 'power3.out', delay: 0.15 }
-      );
-    },
+  lazyInitSection('#services', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── GSAP scroll entrance ── */
+    ScrollTrigger.create({
+      trigger: '#services',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="services-header"]',
+          { autoAlpha: 0, x: -40 },
+          { autoAlpha: 1, x: 0, duration: 0.7, ease: 'power3.out' }
+        );
+        gsap.fromTo('[data-gsap="svc-item"]',
+          { autoAlpha: 0, x: -28 },
+          { autoAlpha: 1, x: 0, duration: 0.5, stagger: 0.09, ease: 'power3.out', delay: 0.2 }
+        );
+        gsap.fromTo('[data-gsap="services-stats"] .svc-stat',
+          { autoAlpha: 0, y: 18 },
+          { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.09, ease: 'power3.out', delay: 0.55 }
+        );
+        gsap.fromTo('[data-gsap="services-globe"]',
+          { autoAlpha: 0, scale: 0.92 },
+          { autoAlpha: 1, scale: 1, duration: 0.9, ease: 'power3.out', delay: 0.15 }
+        );
+      },
+    });
   });
 </script>
 

@@ -424,75 +424,79 @@ const points = [
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  // Section header slides in on enter
-  ScrollTrigger.create({
-    trigger: '#process',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo(
-        '[data-gsap="process-header"]',
-        { autoAlpha: 0, y: 40 },
-        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
-      );
-      gsap.fromTo(
-        '[data-gsap="process-cta"]',
-        { autoAlpha: 0, y: 20 },
-        { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.25 }
-      );
-    },
-  });
+  lazyInitSection('#process', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
 
-  // Tap-to-toggle description support for touch devices
-  const steps = document.querySelectorAll<HTMLElement>('.process__step');
+    // Section header slides in on enter
+    ScrollTrigger.create({
+      trigger: '#process',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo(
+          '[data-gsap="process-header"]',
+          { autoAlpha: 0, y: 40 },
+          { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+        );
+        gsap.fromTo(
+          '[data-gsap="process-cta"]',
+          { autoAlpha: 0, y: 20 },
+          { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.25 }
+        );
+      },
+    });
 
-  const closeAll = (except?: HTMLElement) => {
-    steps.forEach((step) => {
-      if (step !== except) {
-        step.classList.remove('is-open');
-        step.querySelector('.process__node')?.setAttribute('aria-expanded', 'false');
-        step.querySelector<HTMLElement>('.process__info')?.style.removeProperty('--shift');
+    // Tap-to-toggle description support for touch devices
+    const steps = document.querySelectorAll<HTMLElement>('.process__step');
+
+    const closeAll = (except?: HTMLElement) => {
+      steps.forEach((step) => {
+        if (step !== except) {
+          step.classList.remove('is-open');
+          step.querySelector('.process__node')?.setAttribute('aria-expanded', 'false');
+          step.querySelector<HTMLElement>('.process__info')?.style.removeProperty('--shift');
+        }
+      });
+    };
+
+    // Keep the info block fully inside the browser viewport so the full
+    // description is always readable without needing to scroll.
+    const clampInfo = (step: HTMLElement) => {
+      const info = step.querySelector<HTMLElement>('.process__info');
+      if (!info) return;
+      info.style.setProperty('--shift', '0px');
+      const rect = info.getBoundingClientRect();
+      const margin = 12;
+      let shift = 0;
+      if (rect.left < margin) {
+        shift = margin - rect.left;
+      } else if (rect.right > window.innerWidth - margin) {
+        shift = window.innerWidth - margin - rect.right;
       }
+      info.style.setProperty('--shift', `${shift}px`);
+    };
+
+    steps.forEach((step) => {
+      const node = step.querySelector('.process__node');
+      node?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = step.classList.contains('is-open');
+        closeAll(step);
+        step.classList.toggle('is-open', !isOpen);
+        node.setAttribute('aria-expanded', String(!isOpen));
+        if (!isOpen) clampInfo(step);
+      });
+      step.addEventListener('mouseenter', () => clampInfo(step));
+      step.addEventListener('focusin', () => clampInfo(step));
     });
-  };
 
-  // Keep the info block fully inside the browser viewport so the full
-  // description is always readable without needing to scroll.
-  const clampInfo = (step: HTMLElement) => {
-    const info = step.querySelector<HTMLElement>('.process__info');
-    if (!info) return;
-    info.style.setProperty('--shift', '0px');
-    const rect = info.getBoundingClientRect();
-    const margin = 12;
-    let shift = 0;
-    if (rect.left < margin) {
-      shift = margin - rect.left;
-    } else if (rect.right > window.innerWidth - margin) {
-      shift = window.innerWidth - margin - rect.right;
-    }
-    info.style.setProperty('--shift', `${shift}px`);
-  };
-
-  steps.forEach((step) => {
-    const node = step.querySelector('.process__node');
-    node?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = step.classList.contains('is-open');
-      closeAll(step);
-      step.classList.toggle('is-open', !isOpen);
-      node.setAttribute('aria-expanded', String(!isOpen));
-      if (!isOpen) clampInfo(step);
+    document.addEventListener('click', () => closeAll());
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAll();
     });
-    step.addEventListener('mouseenter', () => clampInfo(step));
-    step.addEventListener('focusin', () => clampInfo(step));
-  });
-
-  document.addEventListener('click', () => closeAll());
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeAll();
   });
 </script>

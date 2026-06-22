@@ -37,6 +37,7 @@ const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
               data-count={String(s.count)}
               data-before={s.before || undefined}
               data-after={s.after || undefined}
+              style={`min-width:${s.value.length}ch`}
             >{s.value}</span>
             <span class="about__stat-label">{s.label}</span>
           </div>
@@ -171,9 +172,12 @@ const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
   }
   .about__stat-card:hover::after { opacity: 1; }
   .about__stat-value {
+    display: inline-block;
     font-family: var(--font-serif);
     font-size: 2.5rem;
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
     background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-light));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -244,43 +248,47 @@ const c = (l === 'ar' ? ar?.data : en?.data) ?? en!.data;
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  function countUp(el: HTMLElement) {
-    const target = parseInt(el.dataset.count ?? '0', 10);
-    const before = el.dataset.before ?? '';
-    const after  = el.dataset.after  ?? '';
-    const obj = { val: 0 };
-    gsap.to(obj, {
-      val: target,
-      duration: 2,
-      ease: 'power2.out',
-      onUpdate() { el.textContent = before + Math.round(obj.val) + after; },
-      onComplete() { el.textContent = before + target + after; },
-    });
-  }
+  lazyInitSection('#about', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
 
-  ScrollTrigger.create({
-    trigger: '#about',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="about-left"]',
-        { autoAlpha: 0, x: -50 },
-        { autoAlpha: 1, x: 0, duration: 0.85, ease: 'power3.out' }
-      );
-      gsap.fromTo('[data-gsap="about-stats"] .about__stat-card',
-        { autoAlpha: 0, y: 30, scale: 0.95 },
-        { autoAlpha: 1, y: 0, scale: 1, duration: 0.55, stagger: 0.1, ease: 'back.out(1.3)', delay: 0.2 }
-      ).then(() => {
-        document.querySelectorAll<HTMLElement>('#about .about__stat-value[data-count]').forEach(countUp);
+    function countUp(el: HTMLElement) {
+      const target = parseInt(el.dataset.count ?? '0', 10);
+      const before = el.dataset.before ?? '';
+      const after  = el.dataset.after  ?? '';
+      const obj = { val: 0 };
+      gsap.to(obj, {
+        val: target,
+        duration: 2,
+        ease: 'power2.out',
+        onUpdate() { el.textContent = before + Math.round(obj.val) + after; },
+        onComplete() { el.textContent = before + target + after; },
       });
-      gsap.fromTo('[data-gsap="about-highlight"]',
-        { autoAlpha: 0, x: 40 },
-        { autoAlpha: 1, x: 0, duration: 0.5, stagger: 0.15, ease: 'power3.out', delay: 0.3 }
-      );
-    },
+    }
+
+    ScrollTrigger.create({
+      trigger: '#about',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="about-left"]',
+          { autoAlpha: 0, x: -50 },
+          { autoAlpha: 1, x: 0, duration: 0.85, ease: 'power3.out' }
+        );
+        gsap.fromTo('[data-gsap="about-stats"] .about__stat-card',
+          { autoAlpha: 0, y: 30, scale: 0.95 },
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.55, stagger: 0.1, ease: 'back.out(1.3)', delay: 0.2 }
+        ).then(() => {
+          document.querySelectorAll<HTMLElement>('#about .about__stat-value[data-count]').forEach(countUp);
+        });
+        gsap.fromTo('[data-gsap="about-highlight"]',
+          { autoAlpha: 0, x: 40 },
+          { autoAlpha: 1, x: 0, duration: 0.5, stagger: 0.15, ease: 'power3.out', delay: 0.3 }
+        );
+      },
+    });
   });
 </script>

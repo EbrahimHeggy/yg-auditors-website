@@ -276,58 +276,62 @@ const catIcons: Record<string, string> = {
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  lazyInitSection('#industries', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
 
-  ScrollTrigger.create({
-    trigger: '#industries',
-    start: 'top 80%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="industries-header"]',
-        { autoAlpha: 0, y: 36 },
-        { autoAlpha: 1, y: 0, duration: 0.65, ease: 'power3.out' }
-      );
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      const cards = gsap.utils.toArray<HTMLElement>('#industries .industry-card');
+    ScrollTrigger.create({
+      trigger: '#industries',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="industries-header"]',
+          { autoAlpha: 0, y: 36 },
+          { autoAlpha: 1, y: 0, duration: 0.65, ease: 'power3.out' }
+        );
 
-      gsap.fromTo(cards,
-        { autoAlpha: 0, y: reduced ? 18 : 72, scale: reduced ? 1 : 0.88 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: reduced ? 0.35 : 0.75,
-          stagger: reduced ? 0.08 : 0.14,
-          ease: reduced ? 'power2.out' : 'power4.out',
-          delay: 0.15,
-          clearProps: 'transform',
-        }
-      ).then(() => {
-        if (!reduced) {
-          cards.forEach((card, i) => {
-            setTimeout(() => card.classList.add('is-breathing'), i * 320);
-          });
-        }
-      });
+        const cards = gsap.utils.toArray<HTMLElement>('#industries .industry-card');
 
-      /* Icon wrap pops in with a bounce */
-      gsap.fromTo('#industries .industry-card__icon-wrap',
-        { scale: 0, rotation: -15, autoAlpha: 0 },
-        {
-          scale: 1,
-          rotation: 0,
-          autoAlpha: 1,
-          duration: reduced ? 0.25 : 0.55,
-          stagger: reduced ? 0.08 : 0.14,
-          ease: reduced ? 'power2.out' : 'back.out(2.8)',
-          delay: reduced ? 0.2 : 0.42,
-          clearProps: 'transform',
-        }
-      );
-    },
+        gsap.fromTo(cards,
+          { autoAlpha: 0, y: reduced ? 18 : 72, scale: reduced ? 1 : 0.88 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: reduced ? 0.35 : 0.75,
+            stagger: reduced ? 0.08 : 0.14,
+            ease: reduced ? 'power2.out' : 'power4.out',
+            delay: 0.15,
+            clearProps: 'transform',
+          }
+        ).then(() => {
+          if (!reduced) {
+            cards.forEach((card, i) => {
+              setTimeout(() => card.classList.add('is-breathing'), i * 320);
+            });
+          }
+        });
+
+        /* Icon wrap pops in with a bounce */
+        gsap.fromTo('#industries .industry-card__icon-wrap',
+          { scale: 0, rotation: -15, autoAlpha: 0 },
+          {
+            scale: 1,
+            rotation: 0,
+            autoAlpha: 1,
+            duration: reduced ? 0.25 : 0.55,
+            stagger: reduced ? 0.08 : 0.14,
+            ease: reduced ? 'power2.out' : 'back.out(2.8)',
+            delay: reduced ? 0.2 : 0.42,
+            clearProps: 'transform',
+          }
+        );
+      },
+    });
   });
 </script>

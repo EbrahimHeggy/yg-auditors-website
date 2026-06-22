@@ -180,35 +180,39 @@ const c = (lang === 'ar' ? ar?.data : en?.data) ?? en!.data;
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  import { lazyInitSection } from '../scripts/lazy-section';
 
-  ScrollTrigger.create({
-    trigger: '#consultant',
-    start: 'top 82%',
-    once: true,
-    onEnter: () => {
-      gsap.fromTo('[data-gsap="consultant-content"]',
-        { autoAlpha: 0, x: -60 },
-        { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
-      );
-      gsap.fromTo('[data-gsap="consultant-form"]',
-        { autoAlpha: 0, x: 60 },
-        { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
-      );
-    },
-  });
+  lazyInitSection('#consultant', async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
 
-  const form = document.getElementById('consultant-form') as HTMLFormElement | null;
-  const status = document.getElementById('form-status');
+    ScrollTrigger.create({
+      trigger: '#consultant',
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        gsap.fromTo('[data-gsap="consultant-content"]',
+          { autoAlpha: 0, x: -60 },
+          { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
+        );
+        gsap.fromTo('[data-gsap="consultant-form"]',
+          { autoAlpha: 0, x: 60 },
+          { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power3.out' }
+        );
+      },
+    });
 
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (status) {
-      status.textContent = '✓ Message sent! We will contact you soon.';
-      status.style.color = 'var(--color-success)';
-    }
-    form.reset();
+    const form = document.getElementById('consultant-form') as HTMLFormElement | null;
+    const status = document.getElementById('form-status');
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (status) {
+        status.textContent = '✓ Message sent! We will contact you soon.';
+        status.style.color = 'var(--color-success)';
+      }
+      form.reset();
+    });
   });
 </script>
