@@ -114,7 +114,7 @@ yg-auditors-website/
 
 ## Getting Started
 
-**Prerequisites:** Node.js 18+, npm 9+
+**Prerequisites:** Node.js 22.12+ (required by Astro 6), npm 9+
 
 ```bash
 git clone <repo-url>
