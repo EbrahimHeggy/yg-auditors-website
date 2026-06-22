@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Ebrahim-Muhammed/yg-auditors-website
   branch: master
+  base_url: https://yg-auditors.netlify.app
+  auth_endpoint: .netlify/functions/auth
 
 local_backend: true
 
