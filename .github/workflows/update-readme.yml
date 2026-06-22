@@ -1,0 +1,30 @@
+name: Update README
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set last-updated date
+        run: |
+          DATE=$(date -u +'%Y-%m-%d')
+          sed -i "s/^_Last updated: .*_$/_Last updated: ${DATE}_/" README.md
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet README.md; then
+            git add README.md
+            git commit -m "chore: update README last-updated date [skip ci]"
+            git push
+          fi

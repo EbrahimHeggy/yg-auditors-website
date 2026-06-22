@@ -7,6 +7,9 @@
 [![Astro](https://img.shields.io/badge/Astro-FF5D01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)](https://gsap.com)
+[![Build](https://github.com/Ebrahim-Muhammed/yg-auditors-website/actions/workflows/build.yml/badge.svg)](https://github.com/Ebrahim-Muhammed/yg-auditors-website/actions/workflows/build.yml)
+
+_Last updated: 2026-06-22_
 
 </div>
 
