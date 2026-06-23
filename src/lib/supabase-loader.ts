@@ -57,8 +57,9 @@ export function supabaseLoader(table: string, fallback: Fallback) {
             return entry as Entry;
           });
         }
-      } catch {
-        // network/Supabase unavailable — fall through to local fallback
+        console.error(`Supabase fetch failed for table "${table}": ${res.status} ${res.statusText}`);
+      } catch (err) {
+        console.error(`Error fetching from Supabase table "${table}":`, err);
       }
     }
     return loadFallback(fallback);
