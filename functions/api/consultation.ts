@@ -32,6 +32,14 @@ function escapeHtml(value: string): string {
 export async function onRequestPost(context: PagesContext): Promise<Response> {
   const { request, env } = context;
 
+  if (!env.SUPABASE_URL || !env.SUPABASE_ANON_KEY) {
+    console.error('Missing SUPABASE_URL or SUPABASE_ANON_KEY environment variable');
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   let body: LeadPayload;
   try {
     body = await request.json();
@@ -39,10 +47,11 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
 
-  const name = (body.name ?? '').trim();
-  const email = (body.email ?? '').trim();
-  const message = (body.message ?? '').trim();
-  const honeypot = (body.company ?? '').trim();
+  // JSON values aren't guaranteed to be strings — coerce safely so .trim() can't throw
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  const email = typeof body.email === 'string' ? body.email.trim() : '';
+  const message = typeof body.message === 'string' ? body.message.trim() : '';
+  const honeypot = typeof body.company === 'string' ? body.company.trim() : '';
 
   // Bot caught the honeypot field — pretend success so it doesn't adapt.
   if (honeypot) {
@@ -71,12 +80,13 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
   });
 
   if (!insertRes.ok) {
-    const detail = await insertRes.text();
-    return new Response(JSON.stringify({ error: `Could not save submission: ${detail}` }), { status: 502 });
+    // Log details server-side; never leak raw DB errors (schema, constraints) to the client
+    console.error(`Supabase insert failed (${insertRes.status}): ${await insertRes.text()}`);
+    return new Response(JSON.stringify({ error: 'Could not save submission' }), { status: 502 });
   }
 
-  if (env.RESEND_API_KEY) {
-    const notifyTo = env.LEAD_NOTIFY_EMAIL || 'Ygalal@yg-auditors.com';
+  if (env.RESEND_API_KEY && env.LEAD_NOTIFY_EMAIL) {
+    const notifyTo = env.LEAD_NOTIFY_EMAIL;
     try {
       const emailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -101,7 +111,7 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
       console.error('Resend notification failed:', err);
     }
   } else {
-    console.warn('RESEND_API_KEY not set — skipping email notification');
+    console.warn('RESEND_API_KEY or LEAD_NOTIFY_EMAIL not set — skipping email notification');
   }
 
   return new Response(JSON.stringify({ success: true }), {
