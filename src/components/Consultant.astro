@@ -35,7 +35,7 @@ const c = (lang === 'ar' ? ar?.data : en?.data) ?? en!.data;
       </div>
     </div>
 
-    <form class="consultant__form" id="consultant-form" data-gsap="consultant-form" novalidate>
+    <form class="consultant__form" id="consultant-form" data-gsap="consultant-form" data-lang={lang} novalidate>
       <div class="form-group">
         <label class="form-label" for="name">{lang === 'ar' ? 'الاسم' : 'Name'}</label>
         <input
@@ -69,10 +69,14 @@ const c = (lang === 'ar' ? ar?.data : en?.data) ?? en!.data;
           required
         ></textarea>
       </div>
+      <div class="form-honeypot" aria-hidden="true">
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+      </div>
       <button type="submit" class="btn btn-white form-submit">
-        {c.submit} →
+        <span class="form-submit__label">{c.submit} →</span>
       </button>
-      <p class="form-note" id="form-status"></p>
+      <p class="form-note" id="form-status" role="status" aria-live="polite"></p>
     </form>
   </div>
 </section>
@@ -177,6 +181,17 @@ const c = (lang === 'ar' ? ar?.data : en?.data) ?? en!.data;
   @media (max-width: 900px) {
     .consultant__inner { grid-template-columns: 1fr; gap: 2.5rem; }
   }
+
+  .form-honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    left: -9999px;
+  }
+  .form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 </style>
 
 <script>
@@ -205,14 +220,54 @@ const c = (lang === 'ar' ? ar?.data : en?.data) ?? en!.data;
 
     const form = document.getElementById('consultant-form') as HTMLFormElement | null;
     const status = document.getElementById('form-status');
+    const submitBtn = form?.querySelector<HTMLButtonElement>('.form-submit');
+    const submitLabel = form?.querySelector('.form-submit__label');
 
-    form?.addEventListener('submit', (e) => {
+    if (!form || !status || !submitBtn || !submitLabel) return;
+
+    const isAr = form.dataset.lang === 'ar';
+    const originalLabel = submitLabel.textContent ?? '';
+    const messages = {
+      sending: isAr ? 'جارٍ الإرسال...' : 'Sending...',
+      success: isAr ? '✓ تم إرسال الرسالة! سنتواصل معك قريبًا.' : '✓ Message sent! We will contact you soon.',
+      error: isAr ? 'حدث خطأ ما. حاول مرة أخرى أو راسلنا مباشرة.' : 'Something went wrong. Please try again or email us directly.',
+    };
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (status) {
-        status.textContent = '✓ Message sent! We will contact you soon.';
+      if (!form.reportValidity()) return;
+
+      const data = new FormData(form);
+      const payload = {
+        name: String(data.get('name') ?? '').trim(),
+        email: String(data.get('email') ?? '').trim(),
+        message: String(data.get('message') ?? '').trim(),
+        company: String(data.get('company') ?? '').trim(),
+      };
+
+      submitBtn.disabled = true;
+      submitLabel.textContent = messages.sending;
+      status.textContent = '';
+
+      try {
+        const res = await fetch('/api/consultation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error('Submission failed');
+
+        status.textContent = messages.success;
         status.style.color = 'var(--color-success)';
+        form.reset();
+      } catch {
+        status.textContent = messages.error;
+        status.style.color = 'var(--color-error, #e54848)';
+      } finally {
+        submitBtn.disabled = false;
+        submitLabel.textContent = originalLabel;
       }
-      form.reset();
     });
   });
 </script>
