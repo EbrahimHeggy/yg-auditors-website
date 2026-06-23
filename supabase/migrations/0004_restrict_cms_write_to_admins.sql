@@ -15,6 +15,7 @@ begin
   ])
   loop
     execute format('drop policy if exists "Authenticated can manage %1$I" on public.%1$I', t);
+    execute format('drop policy if exists "Admins can manage %1$I" on public.%1$I', t);
     execute format(
       'create policy "Admins can manage %1$I" on public.%1$I for all to authenticated using ((auth.jwt() -> ''app_metadata'' -> ''roles'') ? ''admin'') with check ((auth.jwt() -> ''app_metadata'' -> ''roles'') ? ''admin'')',
       t
