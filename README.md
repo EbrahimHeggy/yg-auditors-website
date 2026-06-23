@@ -9,7 +9,7 @@
 [![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)](https://gsap.com)
 [![Build](https://github.com/Ebrahim-Muhammed/yg-auditors-website/actions/workflows/build.yml/badge.svg)](https://github.com/Ebrahim-Muhammed/yg-auditors-website/actions/workflows/build.yml)
 
-_Last updated: 2026-06-22_
+_Last updated: 2026-06-23_
 
 </div>
 
