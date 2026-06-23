@@ -1,6 +1,6 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
-import { file, glob } from 'astro/loaders';
+import { supabaseLoader } from './lib/supabase-loader';
 
 const statItem = z.object({
   value: z.string(),
@@ -11,7 +11,7 @@ const statItem = z.object({
 });
 
 const hero = defineCollection({
-  loader: file('src/content/sections/hero.json'),
+  loader: supabaseLoader('cms_hero', { kind: 'localized-file', file: 'src/content/sections/hero.json' }),
   schema: z.object({
     badge: z.string(),
     phrases: z.array(z.string()),
@@ -23,7 +23,7 @@ const hero = defineCollection({
 });
 
 const about = defineCollection({
-  loader: file('src/content/sections/about.json'),
+  loader: supabaseLoader('cms_about', { kind: 'localized-file', file: 'src/content/sections/about.json' }),
   schema: z.object({
     badge: z.string(),
     title: z.string(),
@@ -36,7 +36,7 @@ const about = defineCollection({
 });
 
 const services = defineCollection({
-  loader: file('src/content/sections/services.json'),
+  loader: supabaseLoader('cms_services', { kind: 'localized-file', file: 'src/content/sections/services.json' }),
   schema: z.object({
     badge: z.string(),
     title: z.string(),
@@ -48,7 +48,7 @@ const services = defineCollection({
 });
 
 const qualifications = defineCollection({
-  loader: file('src/content/sections/qualifications.json'),
+  loader: supabaseLoader('cms_qualifications', { kind: 'localized-file', file: 'src/content/sections/qualifications.json' }),
   schema: z.object({
     badge: z.string(),
     title: z.string(),
@@ -76,7 +76,7 @@ const qualifications = defineCollection({
 });
 
 const consultant = defineCollection({
-  loader: file('src/content/sections/consultant.json'),
+  loader: supabaseLoader('cms_consultant', { kind: 'localized-file', file: 'src/content/sections/consultant.json' }),
   schema: z.object({
     badge: z.string(),
     title: z.string(),
@@ -95,7 +95,7 @@ const consultant = defineCollection({
 });
 
 const teamSection = defineCollection({
-  loader: file('src/content/sections/team-section.json'),
+  loader: supabaseLoader('cms_team_section', { kind: 'localized-file', file: 'src/content/sections/team-section.json' }),
   schema: z.object({
     badge: z.string(),
     title: z.string(),
@@ -114,7 +114,7 @@ const teamSection = defineCollection({
 });
 
 const contactSection = defineCollection({
-  loader: file('src/content/sections/contact-section.json'),
+  loader: supabaseLoader('cms_contact_section', { kind: 'localized-file', file: 'src/content/sections/contact-section.json' }),
   schema: z.object({
     badge: z.string(),
     title: z.string(),
@@ -123,7 +123,7 @@ const contactSection = defineCollection({
 });
 
 const team = defineCollection({
-  loader: glob({ pattern: '*.json', base: './src/content/team' }),
+  loader: supabaseLoader('cms_team', { kind: 'folder', dir: 'src/content/team' }),
   schema: z.object({
     name: z.string(),
     arabicName: z.string(),
@@ -144,9 +144,7 @@ const team = defineCollection({
 });
 
 const contactInfo = defineCollection({
-  loader: file('src/content/contact-info.json', {
-    parser: (text) => ({ info: JSON.parse(text) }),
-  }),
+  loader: supabaseLoader('cms_contact_info', { kind: 'single-file', file: 'src/content/contact-info.json', id: 'info' }),
   schema: z.object({
     contact: z.object({
       address: z.object({
