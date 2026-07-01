@@ -1,0 +1,10 @@
+[33m431fe89[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix consultation form: use Netlify Functions with Resend
+[33m0197128[m fix: use repo-relative paths in netlify.toml
+[33m48b9687[m chore: update GitHub repo links to EbrahimHeggy account
+[33ma126a9c[m Fix functions path and add netlify.toml routing for consultation form
+[33me9d11e4[m Send form submissions to email and fix issue
+[33m4950b49[m Merge pull request #2 from Ebrahim-Muhammed/fix/consultation-form-submission
+[33m82ace4c[m chore: update README last-updated date [skip ci]
+[33mcc58d02[m Merge pull request #3 from Ebrahim-Muhammed/feature/refine-supabase-cms
+[33m977bc39[m Make 0004 admin-policy migration idempotent
+[33m8fd009b[m Address code review: restrict CMS writes to admins, log Supabase fetch failures
