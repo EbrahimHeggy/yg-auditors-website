@@ -1,0 +1,73 @@
+YG-AUDITORS WEBSITE — SESSION SUMMARY
+CMS, AI Content & Hosting Strategy Discussion
+
+1. CLARIFIED HOSTING TERMINOLOGY
+Netlify is a managed hosting platform, not "self-hosted." What's actually
+self-hosted in the project is the CMS login -- a custom GitHub OAuth flow
+(instead of Netlify's built-in Identity service) that still runs on
+Netlify's infrastructure.
+
+2. CLOUDFLARE'S ROLE, EXPLORED
+Cloudflare can replace Netlify as the host, sit in front of it as a
+CDN/DNS layer, or replace its login functions -- but none of that is
+urgent. Decision: don't touch hosting until there's an actual reason to
+(traffic, cost limits, or the bigger CMS change described below).
+
+3. PROGRAMMATIC SEO (AI-WRITTEN BLOG) -- ARCHITECTURE DISCUSSED
+Best-practice approach: AI drafts articles offline (not live per page
+view), content becomes static pre-rendered pages via Astro, with unique
+metadata per page and a sitemap -- to avoid Google's "scaled content
+abuse" penalty risk for thin/duplicate AI content.
+
+4. KEY DECISIONS MADE ON THE AI PIPELINE
+- AI source: cloud API (Claude or OpenAI, swappable), not a local model
+- Review: auto-publish, no manual approval step (accepted SEO risk,
+  mitigated with automated quality guardrails instead)
+- Orchestration: n8n (already running) instead of a custom script --
+  schedule-triggered, calls the AI, writes content
+- "Share it" clarified to mean visible ON THE WEBSITE (blog section,
+  homepage, nav link) -- not social media posting
+
+5. A CONCRETE IMPLEMENTATION PLAN WAS DRAFTED (not yet built)
+Covering: new blog content structure, bilingual EN/AR blog pages,
+sitemap, homepage "latest posts" section, and a starter n8n workflow
+template. This was paused -- user asked to discuss only, so nothing was
+implemented.
+
+6. CMS COMPARISON
+Compared Decap CMS (current), Sveltia CMS (drop-in upgrade, better
+bilingual support, zero migration cost), and Strapi (self-hosted
+database CMS, better for automation/scale but real infrastructure to
+maintain). Initial recommendation: Sveltia now, Strapi only if content
+volume grows large.
+
+7. CRITICAL PROBLEM DISCOVERED: CLIENT CAN'T ACCESS THE CMS
+User wants to drop Netlify and let the actual client (non-technical, no
+GitHub account) log in and publish. Investigation found the project's
+existing "invite a user" feature (/admin/invite, /accept-invite) uses a
+different login system (Netlify Identity) than the one actually guarding
+the CMS (GitHub OAuth) -- so it wouldn't have worked anyway. This was a
+real bug/gap in the current setup, not just a missing feature.
+
+8. SCOPE EXPANDED: THIS IS AN AGENCY-WIDE PROBLEM, NOT ONE CLIENT
+User clarified they build sites for multiple clients and won't create a
+GitHub account for each one. This changed the recommendation from
+"patch around GitHub login" to replacing the CMS approach entirely.
+
+9. NEW RECOMMENDED STACK (NOT YET BUILT)
+- Cloudflare Pages -- hosts the static website (replaces Netlify)
+- Supabase -- hosts the project database (Postgres)
+- Directus (self-hosted CMS) -- gives every client a normal
+  email/password login, no GitHub required, reusable for future client
+  sites
+- Railway -- runs Directus itself (recommended over a self-managed VPS,
+  since it requires no server maintenance)
+- n8n -- automation glue: AI writes content, pushes it into Directus
+  via a normal API call
+
+10. CURRENT STATUS
+Nothing in the codebase has changed yet. Everything above is an agreed
+direction from discussion, not implemented work. The one open decision
+still on the table: whether to migrate the existing YG-Auditors site to
+this new stack now, or treat it as the template for future client
+projects while this site stays on its current Decap setup for now.
