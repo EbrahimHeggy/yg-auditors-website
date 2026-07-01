@@ -9,7 +9,7 @@
 [![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)](https://gsap.com)
 [![Refine](https://img.shields.io/badge/Refine-1890FF?style=for-the-badge&logo=refine&logoColor=white)](https://refine.dev)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
-[![Build](https://github.com/Ebrahim-Muhammed/yg-auditors-website/actions/workflows/build.yml/badge.svg)](https://github.com/Ebrahim-Muhammed/yg-auditors-website/actions/workflows/build.yml)
+[![Build](https://github.com/EbrahimHeggy/yg-auditors-website/actions/workflows/build.yml/badge.svg)](https://github.com/EbrahimHeggy/yg-auditors-website/actions/workflows/build.yml)
 
 _Last updated: 2026-06-23_
 
